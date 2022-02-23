@@ -31,6 +31,7 @@ COPY --from=blacksmith /workshop/target/release/circuit-collator /usr/local/bin
 
 RUN useradd -m -u 1000 -U -s /bin/sh -d /t3rn t3rn && \
     mkdir /t3rn/data && \
+	setfacl -R -m u:t3rn:rwx /t3rn/data && \
     rm -rf /usr/lib/python* /usr/bin /usr/sbin /usr/share/man
 
 USER t3rn

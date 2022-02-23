@@ -11,9 +11,13 @@ After startup run
 
 ```
 phrase=$(grep -oP '(?<=phrase:)[^\n]+' ./keys/t3rn.key)
-docker run circuit-collator:latest key insert \
-  --base-path ./data/t3rn \
-  --chain ./specs/t3rn.raw.json \
+docker run \
+  -v "$(pwd)/specs:/usr/local/etc" \
+  circuit-collator:latest \
+  key \
+  insert \
+  --base-path /t3rn/data \
+  --chain /usr/local/etc/t3rn.raw.json \
   --scheme Sr25519 \
   --suri "$phrase" \
   --key-type aura

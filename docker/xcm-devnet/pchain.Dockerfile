@@ -28,6 +28,7 @@ COPY --from=blacksmith /workshop/target/release/parachain-collator /usr/local/bi
 
 RUN useradd -m -u 1000 -U -s /bin/sh -d /para para && \
     mkdir /para/data && \
+    setfacl -R -m u:para:rwx /para/data && \
     rm -rf /usr/lib/python* /usr/bin /usr/sbin /usr/share/man
 
 USER para
