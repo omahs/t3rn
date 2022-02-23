@@ -7,9 +7,32 @@ mkdir -p ./data/{alice,bob,charlie,t3rn,pchain}
 docker-compose up
 ```
 
+After startup run 
+
+```
+phrase=$(grep -oP '(?<=phrase:)[^\n]+' ./keys/t3rn.key)
+docker run circuit-collator:latest key insert \
+  --base-path ./data/t3rn \
+  --chain ./specs/t3rn.raw.json \
+  --scheme Sr25519 \
+  --suri "$phrase" \
+  --key-type aura
+```
+
+to insert the aura key that enables t3rn block production.
+
+*tbc... ilustrate how to manually insert the node keys into pchain's keystore as 4some reason pchain doesn't have a key>insert subcommand* 
+
+## Cleanup
+
+```nofmt
+docker-compose down
+rm -r ./data/{alice,bob,charlie,t3rn,pchain}/*
+```
+
 Spins up a rococo local devnet consisting of 3 relay chain validators and 1 collator for each parachain.
 
-> Parachains must be registered (HRMP channels initialzed) as illustrated [in this Zenlink README](https://github.com/zenlinkpro/Zenlink-DEX-Module#register-parachain--establish-hrmp-channel).
+> Parachains must be registered (HRMP channels initialzed) as illustrated [in this Zenlink README](https://github.com/zenlinkpro/Zenlink-DEX-Module#register-parachain--establish-hrmp-channel) or [this official tutorial](https://docs.substrate.io/tutorials/v3/cumulus/connect-parachain/#parachain-registration).
 
 <table>
   <tr>
