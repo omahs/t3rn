@@ -148,12 +148,11 @@ services:
       --ws-port 9933
       -d /t3rn/data
       --collator
-      --force-authoring
       --rpc-cors all
       --unsafe-ws-external
       --unsafe-rpc-external
       --execution=native
-      -lruntime=debug
+      -lruntime=debug,wasm-executor=debug,cumulus-collator=trace,cumulus-network=trace,cumulus-consensus=trace
       --chain /t3rn/t3rn.raw.json
       --name t3rn1
       --
@@ -202,12 +201,11 @@ services:
       --ws-port 9923
       -d /t3rn/data
       --collator
-      --force-authoring
       --rpc-cors all
       --unsafe-ws-external
       --unsafe-rpc-external
       --execution=native
-      -lruntime=debug
+      -lruntime=debug,wasm-executor=debug,cumulus-collator=trace,cumulus-network=trace,cumulus-consensus=trace
       --chain /t3rn/t3rn.raw.json
       --name t3rn2
       --

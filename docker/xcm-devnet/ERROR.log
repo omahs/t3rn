@@ -1,0 +1,95 @@
+alice      | 2022-02-24 16:34:45 💤 Idle (4 peers), best: #218 (0x76aa…3e96), finalized #215 (0x89b1…7b26), ⬇ 0.9kiB/s ⬆ 1.8kiB/s    
+t3rn1      | 2022-02-24 16:34:46.162  INFO tokio-runtime-worker substrate: [Parachain] 💤 Idle (1 peers), best: #0 (0xe410…cfa1), finalized #0 (0xe410…cfa1), ⬇ 24 B/s ⬆ 24 B/s    
+t3rn1      | 2022-02-24 16:34:46.223  INFO tokio-runtime-worker substrate: [Relaychain] 💤 Idle (4 peers), best: #218 (0x76aa…3e96), finalized #215 (0x89b1…7b26), ⬇ 1.2kiB/s ⬆ 0.9kiB/s    
+bob        | 2022-02-24 16:34:46 💤 Idle (4 peers), best: #218 (0x76aa…3e96), finalized #216 (0x96c1…27fd), ⬇ 1.6kiB/s ⬆ 1.3kiB/s    
+charlie    | 2022-02-24 16:34:47 💤 Idle (4 peers), best: #218 (0x76aa…3e96), finalized #216 (0x96c1…27fd), ⬇ 1.6kiB/s ⬆ 1.5kiB/s    
+t3rn1      | 2022-02-24 16:34:48.023 DEBUG tokio-runtime-worker runtime::inclusion-inherent: [Relaychain] [enter] bitfields.len(): 2, backed_candidates.len(): 0, disputes.len() 0    
+t3rn1      | 2022-02-24 16:34:48.026  INFO tokio-runtime-worker substrate: [Relaychain] ✨ Imported #219 (0xbaf1…a0d3)    
+alice      | 2022-02-24 16:34:48 🙌 Starting consensus session on top of parent 0x76aacf33140601707b294f6ab585520697a08520937808d5259242941d5c3e96    
+alice      | 2022-02-24 16:34:48 🎁 Prepared block for proposing at 219 (1 ms) [hash: 0x16f7a17cc139d998c171435aa0b5896d5c157ea846af1e7adff218cfb978406b; parent_hash: 0x76aa…3e96; extrinsics (2): [0x2566…1397, 0x2c25…45e0]]    
+alice      | 2022-02-24 16:34:48 🔖 Pre-sealed block for proposal at 219. Hash now 0xbaf16f1dd59edc00e4b1f291c8bfb6da4bf3de6863cbec8f79bc04398ab7a0d3, previously 0x16f7a17cc139d998c171435aa0b5896d5c157ea846af1e7adff218cfb978406b.    
+alice      | 2022-02-24 16:34:48 ✨ Imported #219 (0xbaf1…a0d3)    
+t3rn1      | 
+t3rn1      | ====================
+t3rn1      | 
+t3rn1      | Version: 0.1.0
+t3rn1      | 
+t3rn1      |    0: sp_panic_handler::set::{{closure}}
+t3rn1      |    1: std::panicking::rust_panic_with_hook
+t3rn1      |              at rustc/0727994435c75fdedd3e9d226cf434089b0ab585/library/std/src/panicking.rs:610:17
+t3rn1      |    2: std::panicking::begin_panic_handler::{{closure}}
+t3rn1      |              at rustc/0727994435c75fdedd3e9d226cf434089b0ab585/library/std/src/panicking.rs:500:13
+t3rn1      |    3: std::sys_common::backtrace::__rust_end_short_backtrace
+t3rn1      |              at rustc/0727994435c75fdedd3e9d226cf434089b0ab585/library/std/src/sys_common/backtrace.rs:139:18
+t3rn1      |    4: rust_begin_unwind
+t3rn1      |              at rustc/0727994435c75fdedd3e9d226cf434089b0ab585/library/std/src/panicking.rs:498:5
+t3rn1      |    5: core::panicking::panic_fmt
+t3rn1      |              at rustc/0727994435c75fdedd3e9d226cf434089b0ab585/library/core/src/panicking.rs:106:14
+t3rn1      |    6: core::panicking::panic
+t3rn1      |              at rustc/0727994435c75fdedd3e9d226cf434089b0ab585/library/core/src/panicking.rs:47:5
+t3rn1      |    7: <(TupleElement0,TupleElement1) as frame_support::traits::hooks::OnInitialize<BlockNumber>>::on_initialize
+t3rn1      |    8: <(TupleElement0,TupleElement1) as frame_support::traits::hooks::OnInitialize<BlockNumber>>::on_initialize
+t3rn1      |    9: <(TupleElement0,TupleElement1) as frame_support::traits::hooks::OnInitialize<BlockNumber>>::on_initialize
+t3rn1      |   10: frame_executive::Executive<System,Block,Context,UnsignedValidator,AllPallets,COnRuntimeUpgrade>::initialize_block
+t3rn1      |   11: std::panicking::try
+t3rn1      |   12: std::thread::local::LocalKey<T>::with
+t3rn1      |   13: sc_executor::native_executor::WasmExecutor::with_instance::{{closure}}
+t3rn1      |   14: sc_executor::wasm_runtime::RuntimeCache::with_instance
+t3rn1      |   15: <sc_executor::native_executor::NativeElseWasmExecutor<D> as sp_core::traits::CodeExecutor>::call
+t3rn1      |   16: sp_state_machine::execution::StateMachine<B,H,Exec>::execute_aux
+t3rn1      |   17: sp_state_machine::execution::StateMachine<B,H,Exec>::execute_using_consensus_failure_handler
+t3rn1      |   18: <sc_service::client::call_executor::LocalCallExecutor<Block,B,E> as sc_client_api::call_executor::CallExecutor<Block>>::contextual_call
+t3rn1      |   19: sp_api::runtime_decl_for_Core::initialize_block_call_api_at
+t3rn1      |   20: <circuit_parachain_runtime::RuntimeApiImpl<__SR_API_BLOCK__,RuntimeApiImplCall> as sp_api::Core<__SR_API_BLOCK__>>::Core_initialize_block_runtime_api_impl
+t3rn1      |   21: sp_api::Core::initialize_block_with_context
+t3rn1      |   22: sc_block_builder::BlockBuilder<Block,A,B>::new
+t3rn1      |   23: sc_basic_authorship::basic_authorship::Proposer<B,Block,C,A,PR>::propose_with::{{closure}}
+t3rn1      |   24: <core::future::from_generator::GenFuture<T> as core::future::future::Future>::poll
+t3rn1      |   25: <sc_service::task_manager::prometheus_future::PrometheusFuture<T> as core::future::future::Future>::poll
+t3rn1      |   26: <core::future::from_generator::GenFuture<T> as core::future::future::Future>::poll
+t3rn1      |   27: <tracing_futures::Instrumented<T> as core::future::future::Future>::poll
+t3rn1      |   28: tokio::park::thread::CachedParkThread::block_on
+t3rn1      |   29: tokio::runtime::handle::Handle::block_on
+t3rn1      |   30: tokio::loom::std::unsafe_cell::UnsafeCell<T>::with_mut
+t3rn1      |   31: tokio::runtime::task::harness::Harness<T,S>::poll
+t3rn1      |   32: tokio::runtime::blocking::pool::Inner::run
+t3rn1      |   33: std::sys_common::backtrace::__rust_begin_short_backtrace
+t3rn1      |   34: core::ops::function::FnOnce::call_once{{vtable.shim}}
+t3rn1      |   35: <alloc::boxed::Box<F,A> as core::ops::function::FnOnce<Args>>::call_once
+t3rn1      |              at rustc/0727994435c75fdedd3e9d226cf434089b0ab585/library/alloc/src/boxed.rs:1691:9
+t3rn1      |       <alloc::boxed::Box<F,A> as core::ops::function::FnOnce<Args>>::call_once
+t3rn1      |              at rustc/0727994435c75fdedd3e9d226cf434089b0ab585/library/alloc/src/boxed.rs:1691:9
+t3rn1      |       std::sys::unix::thread::Thread::new::thread_start
+t3rn1      |              at rustc/0727994435c75fdedd3e9d226cf434089b0ab585/library/std/src/sys/unix/thread.rs:106:17
+t3rn1      |   36: start_thread
+t3rn1      |   37: clone
+t3rn1      | 
+t3rn1      | 
+t3rn1      | Thread 'tokio-runtime-worker' panicked at 'attempt to calculate the remainder with a divisor of zero', /rustc/0727994435c75fdedd3e9d226cf434089b0ab585/library/core/src/ops/arith.rs:584
+t3rn1      | 
+t3rn1      | This is a bug. Please report it at:
+t3rn1      | 
+t3rn1      | 	https://github.com/t3rn/t3rn/issues/new
+t3rn1      | 
+charlie    | 2022-02-24 16:34:48 ✨ Imported #219 (0xbaf1…a0d3)    
+bob        | 2022-02-24 16:34:48 ✨ Imported #219 (0xbaf1…a0d3)    
+t3rn2      | 2022-02-24 16:34:48.023 DEBUG tokio-runtime-worker runtime::inclusion-inherent: [Relaychain] [enter] bitfields.len(): 2, backed_candidates.len(): 0, disputes.len() 0    
+t3rn2      | 2022-02-24 16:34:48.026  INFO tokio-runtime-worker substrate: [Relaychain] ✨ Imported #219 (0xbaf1…a0d3)    
+t3rn2      | 2022-02-24 16:34:48.034  INFO tokio-runtime-worker cumulus-collator: [Parachain] Starting collation. relay_parent=0xbaf16f1dd59edc00e4b1f291c8bfb6da4bf3de6863cbec8f79bc04398ab7a0d3 at=0xe4106eaa66b5e6b0821d1b8cf2bac0de7a7ef6fdb0078117d7fc5a08e1d6cfa1
+t3rn1      | 2022-02-24 16:34:48.035  INFO tokio-runtime-worker cumulus-collator: [Parachain] Starting collation. relay_parent=0xbaf16f1dd59edc00e4b1f291c8bfb6da4bf3de6863cbec8f79bc04398ab7a0d3 at=0xe4106eaa66b5e6b0821d1b8cf2bac0de7a7ef6fdb0078117d7fc5a08e1d6cfa1
+t3rn1      | 2022-02-24 16:34:48.038  INFO tokio-runtime-worker sc_basic_authorship::basic_authorship: [Parachain] 🙌 Starting consensus session on top of parent 0xe4106eaa66b5e6b0821d1b8cf2bac0de7a7ef6fdb0078117d7fc5a08e1d6cfa1    
+t3rn1      | 2022-02-24 16:34:48.046  WARN tokio-runtime-worker aura: [Parachain] Proposing failed: ClientImport("RuntimeApiError(Application(Execution(RuntimePanicked(\"attempt to calculate the remainder with a divisor of zero\"))))")    
+alice      | 2022-02-24 16:34:50 🥩 Round #217 concluded, committed: SignedCommitment { commitment: Commitment { payload: 0x6ebcc6c994de525f084379e8222b7b41a349b2a629add8f89bb7142e2866b9b6, block_number: 217, validator_set_id: 0 }, signatures: [Some(Signature(aec1f89c7b02094a394d8f2f9eff0f90de0279c24f846f5b94f192a0b5caf80b44a0e1dd3659fcf32af97e8c647be1e8ac39fe3c950e4372adfa117bbd9f787000)), Some(Signature(4aca2e4a5085fd76288d95538c66585e3851e52715f5de0929e2df4cf6aeedfd2a72840661c56230f89978d180f50f8176c62185736e2050a8590ccd84399b8101))] }.    
+charlie    | 2022-02-24 16:34:50 🥩 Round #217 concluded, committed: SignedCommitment { commitment: Commitment { payload: 0x6ebcc6c994de525f084379e8222b7b41a349b2a629add8f89bb7142e2866b9b6, block_number: 217, validator_set_id: 0 }, signatures: [Some(Signature(aec1f89c7b02094a394d8f2f9eff0f90de0279c24f846f5b94f192a0b5caf80b44a0e1dd3659fcf32af97e8c647be1e8ac39fe3c950e4372adfa117bbd9f787000)), Some(Signature(4aca2e4a5085fd76288d95538c66585e3851e52715f5de0929e2df4cf6aeedfd2a72840661c56230f89978d180f50f8176c62185736e2050a8590ccd84399b8101))] }.    
+bob        | 2022-02-24 16:34:50 🥩 Round #217 concluded, committed: SignedCommitment { commitment: Commitment { payload: 0x6ebcc6c994de525f084379e8222b7b41a349b2a629add8f89bb7142e2866b9b6, block_number: 217, validator_set_id: 0 }, signatures: [Some(Signature(aec1f89c7b02094a394d8f2f9eff0f90de0279c24f846f5b94f192a0b5caf80b44a0e1dd3659fcf32af97e8c647be1e8ac39fe3c950e4372adfa117bbd9f787000)), Some(Signature(4aca2e4a5085fd76288d95538c66585e3851e52715f5de0929e2df4cf6aeedfd2a72840661c56230f89978d180f50f8176c62185736e2050a8590ccd84399b8101))] }.    
+t3rn2      | 2022-02-24 16:34:50.759  INFO tokio-runtime-worker substrate: [Parachain] 💤 Idle (1 peers), best: #0 (0xe410…cfa1), finalized #0 (0xe410…cfa1), ⬇ 24 B/s ⬆ 24 B/s    
+t3rn2      | 2022-02-24 16:34:50.841  INFO tokio-runtime-worker substrate: [Relaychain] 💤 Idle (4 peers), best: #219 (0xbaf1…a0d3), finalized #217 (0x4c9f…dab4), ⬇ 2.2kiB/s ⬆ 1.7kiB/s    
+alice      | 2022-02-24 16:34:50 💤 Idle (4 peers), best: #219 (0xbaf1…a0d3), finalized #217 (0x4c9f…dab4), ⬇ 1.3kiB/s ⬆ 2.9kiB/s    
+t3rn1      | 2022-02-24 16:34:51.163  INFO tokio-runtime-worker substrate: [Parachain] 💤 Idle (1 peers), best: #0 (0xe410…cfa1), finalized #0 (0xe410…cfa1), ⬇ 0 ⬆ 0    
+t3rn1      | 2022-02-24 16:34:51.224  INFO tokio-runtime-worker substrate: [Relaychain] 💤 Idle (4 peers), best: #219 (0xbaf1…a0d3), finalized #217 (0x4c9f…dab4), ⬇ 2.2kiB/s ⬆ 1.6kiB/s    
+^CGracefully stopping... (press Ctrl+C again to force)
+Stopping t3rn1   ... done
+Stopping t3rn2   ... done
+Stopping charlie ... done
+Stopping bob     ... done
+Stopping alice   ... done
