@@ -3,15 +3,42 @@
 ## Run
 
 ```nofmt
-mkdir -p ./data/{alice,bob,charlie,t3rn,pchain}
+mkdir -p ./data/{alice,bob,charlie,t3rn1,t3rn2,pchain}
 docker-compose up
 ```
 
 After startup run 
 
 ```
-phrase=$(grep -oP '(?<=phrase:)[^\n]+' ./keys/t3rn.key)
-docker run \
+t3rn1_phrase=$(grep -oP '(?<=phrase:)[^\n]+' ./keys/t3rn1.key)
+t3rn2_phrase=$(grep -oP '(?<=phrase:)[^\n]+' ./keys/t3rn2.key)
+
+docker exec \
+  -u t3rn \
+  t3rn1 \
+  circuit-collator \
+  key \
+  insert \
+  --base-path /t3rn/data \
+  --chain /t3rn/t3rn.raw.json \
+  --scheme Sr25519 \
+  --suri "$t3rn1_phrase" \
+  --key-type aura
+
+docker exec \
+  -u t3rn \
+  t3rn2 \
+  circuit-collator \
+  key \
+  insert \
+  --base-path /t3rn/data \
+  --chain /t3rn/t3rn.raw.json \
+  --scheme Sr25519 \
+  --suri "$t3rn2_phrase" \
+  --key-type aura
+
+###############################################################################
+<!-- docker run \
   -v "$(pwd)/specs:/usr/local/etc" \
   circuit-collator:latest \
   key \
@@ -19,8 +46,9 @@ docker run \
   --base-path /t3rn/data \
   --chain /usr/local/etc/t3rn.raw.json \
   --scheme Sr25519 \
-  --suri "$phrase" \
+  --suri "$t3rn1_phrase" \
   --key-type aura
+-->
 ```
 
 to insert the aura key that enables t3rn block production.
@@ -31,7 +59,7 @@ to insert the aura key that enables t3rn block production.
 
 ```nofmt
 docker-compose down
-rm -r ./data/{alice,bob,charlie,t3rn,pchain}/*
+rm -r ./data/{alice,bob,charlie,t3rn1,t3rn2,pchain}/*
 ```
 
 Spins up a rococo local devnet consisting of 3 relay chain validators and 1 collator for each parachain.
@@ -80,7 +108,7 @@ Spins up a rococo local devnet consisting of 3 relay chain validators and 1 coll
     <td>-</td>
   </tr>
   <tr>
-    <td>t3rn</td>
+    <td>t3rn1</td>
     <td>-</td>
     <td>33332</td>
     <td>8832</td>
@@ -88,6 +116,17 @@ Spins up a rococo local devnet consisting of 3 relay chain validators and 1 coll
     <td>33333</td>
     <td>8833</td>
     <td>9933</td>
+    <td>3000</td>
+  </tr>
+  <tr>
+    <td>t3rn2</td>
+    <td>-</td>
+    <td>33322</td>
+    <td>8822</td>
+    <td>9922</td>
+    <td>33323</td>
+    <td>8823</td>
+    <td>9923</td>
     <td>3000</td>
   </tr>
   <tr>

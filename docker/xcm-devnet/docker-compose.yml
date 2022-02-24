@@ -110,7 +110,7 @@ services:
       --unsafe-rpc-external
       --chain /pdot/rococo-local.raw.json
 
-  t3rn:
+  t3rn1:
     image: circuit-collator:latest
     build:
       context: ../..
@@ -134,10 +134,10 @@ services:
         target: /t3rn/t3rn.raw.json
         read_only: true
       - type: bind
-        source: ./data/t3rn
+        source: ./data/t3rn1
         target: /t3rn/data
         read_only: false
-    container_name: t3rn
+    container_name: t3rn1
     depends_on:
       - alice
       - bob
@@ -148,12 +148,14 @@ services:
       --ws-port 9933
       -d /t3rn/data
       --collator
+      --force-authoring
       --rpc-cors all
       --unsafe-ws-external
       --unsafe-rpc-external
       --execution=native
       -lruntime=debug
       --chain /t3rn/t3rn.raw.json
+      --name t3rn1
       --
       --chain /t3rn/rococo-local.raw.json
       --discover-local
@@ -162,54 +164,109 @@ services:
       --ws-port 9932
       --execution=wasm
 
-  pchain:
-    image: parachain-collator:polkadot-v0.9.13
+  t3rn2:
+    image: circuit-collator:latest
     build:
-      context: .
-      dockerfile: pchain.Dockerfile
+      context: ../..
+      dockerfile: docker/xcm-devnet/t3rn.Dockerfile
     networks:
       - devnet
     ports:
-      - "44444:44444"
-      - "4488:4488"
-      - "4499:4499"
-      - "44443:44443"
-      - "4487:4487"
-      - "4498:4498"
+      - "33322:33322"
+      - "8822:8822"
+      - "9922:9922"
+      - "33323:33323"
+      - "8823:8823"
+      - "9923:9923"
     volumes:
       - type: bind
         source: ./specs/rococo-local.raw.json
-        target: /para/rococo-local.raw.json
+        target: /t3rn/rococo-local.raw.json
         read_only: true
       - type: bind
-        source: ./specs/pchain.raw.json
-        target: /para/pchain.raw.json
+        source: ./specs/t3rn.raw.json
+        target: /t3rn/t3rn.raw.json
         read_only: true
       - type: bind
-        source: ./data/pchain
-        target: /para/data
+        source: ./data/t3rn2
+        target: /t3rn/data
         read_only: false
-    container_name: pchain
+    container_name: t3rn2
     depends_on:
       - alice
       - bob
       - charlie
     command: >
-      --port 44444
-      --rpc-port 4488
-      --ws-port 4499
-      -d /para/data
+      --port 33323
+      --rpc-port 8823
+      --ws-port 9923
+      -d /t3rn/data
       --collator
+      --force-authoring
       --rpc-cors all
       --unsafe-ws-external
       --unsafe-rpc-external
       --execution=native
       -lruntime=debug
-      --chain /para/pchain.raw.json
+      --chain /t3rn/t3rn.raw.json
+      --name t3rn2
       --
-      --chain /para/rococo-local.raw.json
+      --chain /t3rn/rococo-local.raw.json
       --discover-local
-      --port 44443
-      --rpc-port 4487
-      --ws-port 4498
+      --port 33322
+      --rpc-port 8822
+      --ws-port 9922
       --execution=wasm
+
+  # pchain:
+  #   image: parachain-collator:polkadot-v0.9.13
+  #   build:
+  #     context: .
+  #     dockerfile: pchain.Dockerfile
+  #   networks:
+  #     - devnet
+  #   ports:
+  #     - "44444:44444"
+  #     - "4488:4488"
+  #     - "4499:4499"
+  #     - "44443:44443"
+  #     - "4487:4487"
+  #     - "4498:4498"
+  #   volumes:
+  #     - type: bind
+  #       source: ./specs/rococo-local.raw.json
+  #       target: /para/rococo-local.raw.json
+  #       read_only: true
+  #     - type: bind
+  #       source: ./specs/pchain.raw.json
+  #       target: /para/pchain.raw.json
+  #       read_only: true
+  #     - type: bind
+  #       source: ./data/pchain
+  #       target: /para/data
+  #       read_only: false
+  #   container_name: pchain
+  #   depends_on:
+  #     - alice
+  #     - bob
+  #     - charlie
+  #   command: >
+  #     --port 44444
+  #     --rpc-port 4488
+  #     --ws-port 4499
+  #     -d /para/data
+  #     --collator
+  #     --force-authoring
+  #     --rpc-cors all
+  #     --unsafe-ws-external
+  #     --unsafe-rpc-external
+  #     --execution=native
+  #     -lruntime=debug
+  #     --chain /para/pchain.raw.json
+  #     --
+  #     --chain /para/rococo-local.raw.json
+  #     --discover-local
+  #     --port 44443
+  #     --rpc-port 4487
+  #     --ws-port 4498
+  #     --execution=wasm
