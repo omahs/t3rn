@@ -18,7 +18,7 @@ fi
 
 mkdir ./{keys,specs}
 
-## gen custom aura keys 4 the 2 parachains
+## gen custom node keys 4 the 2 parachains
 
 subkey generate --scheme Sr25519 > ./keys/t3rn1.key
 subkey generate --scheme Sr25519 > ./keys/t3rn2.key
@@ -66,10 +66,10 @@ sed 's/"para_id": [[:digit:]]\+/"para_id": 3000/g' \
     -i ./specs/t3rn.json
 sed 's/"parachainId": [[:digit:]]\+/"parachainId": 3000/g' \
     -i ./specs/t3rn.json
-# set the t3rn1 node aura address
+# set the t3rn1 node node address
 sed "s/5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY/$t3rn1_adrs/g" \
     -i ./specs/t3rn.json
-# set the t3rn2 node aura address
+# set the t3rn2 node node address
 sed "s/5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty/$t3rn2_adrs/g" \
     -i ./specs/t3rn.json
 
@@ -97,10 +97,10 @@ sed 's/"para_id": [[:digit:]]\+/"para_id": 4000/g' \
     -i ./specs/pchain.json
 sed 's/"parachainId": [[:digit:]]\+/"parachainId": 4000/g' \
     -i ./specs/pchain.json
-# set the pchain1 node aura address
+# set the pchain1 node node address
 sed "s/5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY/$pchain1_adrs/g" \
     -i ./specs/pchain.json
-# set the pchain2 node aura address
+# set the pchain2 node node address
 sed "s/5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty/$pchain2_adrs/g" \
     -i ./specs/pchain.json
 # rm another unprocessable field
