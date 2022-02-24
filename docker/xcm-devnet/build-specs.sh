@@ -6,13 +6,13 @@
 
 set -xEeo pipefail
 
-if ! docker inspect polkadot:release-v0.9.13 2>&1 > /dev/null; then
+if ! docker inspect polkadot:release-v0.9.13 > /dev/null; then
   docker build -t polkadot:release-v0.9.13 -f polkadot.Dockerfile .
 fi
-if ! docker inspect circuit-collator:latest 2>&1 > /dev/null; then
+if ! docker inspect circuit-collator:latest > /dev/null; then
   docker build -t circuit-collator:latest -f t3rn.Dockerfile ../..
 fi
-if ! docker inspect parachain-collator:polkadot-v0.9.13 2>&1 > /dev/null; then
+if ! docker inspect parachain-collator:polkadot-v0.9.13 > /dev/null; then
   docker build -t parachain-collator:polkadot-v0.9.13 -f pchain.Dockerfile .
 fi
 
@@ -25,10 +25,10 @@ subkey generate --scheme Sr25519 > ./keys/t3rn2.key
 subkey generate --scheme Sr25519 > ./keys/pchain1.key
 subkey generate --scheme Sr25519 > ./keys/pchain2.key
 
-t3rn1_aura=$(grep -oP '(?<=\(SS58\):\s)\S+' ./keys/t3rn1.key)
-t3rn2_aura=$(grep -oP '(?<=\(SS58\):\s)\S+' ./keys/t3rn2.key)
-pchain1_aura=$(grep -oP '(?<=\(SS58\):\s)\S+' ./keys/pchain1.key)
-pchain2_aura=$(grep -oP '(?<=\(SS58\):\s)\S+' ./keys/pchain2.key)
+t3rn1_adrs=$(grep -oP '(?<=\(SS58\):\s)\S+' ./keys/t3rn1.key)
+t3rn2_adrs=$(grep -oP '(?<=\(SS58\):\s)\S+' ./keys/t3rn2.key)
+pchain1_adrs=$(grep -oP '(?<=\(SS58\):\s)\S+' ./keys/pchain1.key)
+pchain2_adrs=$(grep -oP '(?<=\(SS58\):\s)\S+' ./keys/pchain2.key)
 
 ## gen relay chain spec
 
@@ -67,10 +67,10 @@ sed 's/"para_id": [[:digit:]]\+/"para_id": 3000/g' \
 sed 's/"parachainId": [[:digit:]]\+/"parachainId": 3000/g' \
     -i ./specs/t3rn.json
 # set the t3rn1 node aura address
-sed "s/5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY/$t3rn1_aura/g" \
+sed "s/5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY/$t3rn1_adrs/g" \
     -i ./specs/t3rn.json
 # set the t3rn2 node aura address
-sed "s/5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty/$t3rn2_aura/g" \
+sed "s/5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty/$t3rn2_adrs/g" \
     -i ./specs/t3rn.json
 
 docker run \
@@ -98,10 +98,10 @@ sed 's/"para_id": [[:digit:]]\+/"para_id": 4000/g' \
 sed 's/"parachainId": [[:digit:]]\+/"parachainId": 4000/g' \
     -i ./specs/pchain.json
 # set the pchain1 node aura address
-sed "s/5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY/$pchain1_aura/g" \
+sed "s/5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY/$pchain1_adrs/g" \
     -i ./specs/pchain.json
 # set the pchain2 node aura address
-sed "s/5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty/$pchain2_aura/g" \
+sed "s/5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty/$pchain2_adrs/g" \
     -i ./specs/pchain.json
 # rm another unprocessable field
 jq 'del(.genesis.runtime.polkadotXcm)' ./specs/pchain.json  > ./specs/_pchain.json

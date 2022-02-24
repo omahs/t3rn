@@ -1,5 +1,7 @@
 # ⚡*CM* devnet
 
+⚠️ WIP
+
 ## Run
 
 ```nofmt
@@ -7,7 +9,9 @@ mkdir -p ./data/{alice,bob,charlie,t3rn1,t3rn2,pchain}
 docker-compose up
 ```
 
-After startup run 
+Spins up a rococo local devnet consisting of 3 relay chain validators and 2 collators for each parachain.
+
+After startup run:
 
 ```
 t3rn1_phrase=$(grep -oP '(?<=phrase:)[^\n]+' ./keys/t3rn1.key)
@@ -36,47 +40,27 @@ docker exec \
   --scheme Sr25519 \
   --suri "$t3rn2_phrase" \
   --key-type aura
-
-###############################################################################
-<!-- docker run \
-  -v "$(pwd)/specs:/usr/local/etc" \
-  circuit-collator:latest \
-  key \
-  insert \
-  --base-path /t3rn/data \
-  --chain /usr/local/etc/t3rn.raw.json \
-  --scheme Sr25519 \
-  --suri "$t3rn1_phrase" \
-  --key-type aura
--->
 ```
 
-to insert the aura key that enables t3rn block production.
+to set collator keys that enable t3rn block production.
 
 *tbc... ilustrate how to manually insert the node keys into pchain's keystore as 4some reason pchain doesn't have a key>insert subcommand* 
 
-## Cleanup
+Then, parachains can be onboarded as illustrated in [this Zenlink README](https://github.com/zenlinkpro/Zenlink-DEX-Module#register-parachain--establish-hrmp-channel) and [this official tutorial](https://docs.substrate.io/tutorials/v3/cumulus/connect-parachain/#parachain-registration).
 
-```nofmt
-docker-compose down
-rm -r ./data/{alice,bob,charlie,t3rn1,t3rn2,pchain}/*
-```
+> **tl;dr** via UI @ `ws://localhost:9944` use pallet `parasSudoWrapper` and extrinsic `sudoScheduleParaInitialize` with `Alice`; genesis state and wasm are @ `./specs/`, parachain ids in the table below
 
-Spins up a rococo local devnet consisting of 3 relay chain validators and 1 collator for each parachain.
-
-> Parachains must be registered (HRMP channels initialzed) as illustrated [in this Zenlink README](https://github.com/zenlinkpro/Zenlink-DEX-Module#register-parachain--establish-hrmp-channel) or [this official tutorial](https://docs.substrate.io/tutorials/v3/cumulus/connect-parachain/#parachain-registration).
-
-<table>
+<table style="margin-bottom:0;">
   <tr>
     <td><b>Network</b></td>
-    <td><b>Authority</b></td>
+    <td><b>Node</b></td>
     <td colspan="3"><b>Relaychain Ports</b></td>
     <td colspan="3"><b>Parachain Ports</b></td>
     <td><b>Parachain Id</b></td>
   </tr>
   <tr>
-    <td>rococo</td>
-    <td>alice</td>
+    <td>Rococo</td>
+    <td>Alice</td>
     <td>10001</td>
     <td>8844</td>
     <td>9944</td>
@@ -86,8 +70,8 @@ Spins up a rococo local devnet consisting of 3 relay chain validators and 1 coll
     <td>-</td>
   </tr>
   <tr>
-    <td>rococo</td>
-    <td>bob</td>
+    <td>Rococo</td>
+    <td>Bob</td>
     <td>10002</td>
     <td>8845</td>
     <td>9945</td>
@@ -97,8 +81,8 @@ Spins up a rococo local devnet consisting of 3 relay chain validators and 1 coll
     <td>-</td>
   </tr>
   <tr>
-    <td>rococo</td>
-    <td>charlie</td>
+    <td>Rococo</td>
+    <td>Charlie</td>
     <td>10003</td>
     <td>8846</td>
     <td>9946</td>
@@ -108,8 +92,8 @@ Spins up a rococo local devnet consisting of 3 relay chain validators and 1 coll
     <td>-</td>
   </tr>
   <tr>
+    <td>t3rn</td>
     <td>t3rn1</td>
-    <td>-</td>
     <td>33332</td>
     <td>8832</td>
     <td>9932</td>
@@ -119,8 +103,8 @@ Spins up a rococo local devnet consisting of 3 relay chain validators and 1 coll
     <td>3000</td>
   </tr>
   <tr>
+    <td>t3rn</td>
     <td>t3rn2</td>
-    <td>-</td>
     <td>33322</td>
     <td>8822</td>
     <td>9922</td>
@@ -131,7 +115,7 @@ Spins up a rococo local devnet consisting of 3 relay chain validators and 1 coll
   </tr>
   <tr>
     <td>pchain</td>
-    <td>-</td>
+    <td>pchain1</td>
     <td>44444</td>
     <td>4488</td>
     <td>4499</td>
@@ -143,6 +127,13 @@ Spins up a rococo local devnet consisting of 3 relay chain validators and 1 coll
 </table>
 
 *The "pchain" is a plain [Substrate parachain instance](https://github.com/substrate-developer-hub/substrate-parachain-template)*. All code uses `polkadot-v0.9.13` Substrate.
+
+## Cleanup
+
+```nofmt
+docker-compose down
+rm -r ./data/{alice,bob,charlie,t3rn1,t3rn2,pchain}/*
+```
 
 ## Specs
 
