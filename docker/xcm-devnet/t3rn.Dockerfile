@@ -11,17 +11,17 @@ RUN apt-get update && \
 	apt-get dist-upgrade -y -o Dpkg::Options::="--force-confnew" && \
 	apt-get install -y cmake pkg-config libssl-dev git clang libclang-dev
 
-# FIXME
+# FIXME: workaround 4 private submodule t3rn/protocol
 COPY . .
 # RUN	git clone \
 # 		--depth 1 \
 # 		--single-branch \
 # 		--branch $BRANCH \
 # 		--recurse-submodules \
-# 		https://github.com/t3rn/x-t3rn.git \
+# 		https://github.com/t3rn/t3rn.git \
 # 		.
 
-RUN cargo build --release --features with-parachain-runtime
+RUN cargo build --locked --release --features with-parachain-runtime
 
 ###############################################################################
 

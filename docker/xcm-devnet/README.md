@@ -1,6 +1,4 @@
-# ⚡*CM* devnet
-
-⚠️ WIP
+# ⚡*CM* devnet WIP ⚠️
 
 ## Run
 
@@ -13,7 +11,7 @@ Spins up a rococo local devnet consisting of 5 relay chain validators and 2 coll
 
 After startup run:
 
-```
+``` bash
 t3rn1_phrase=$(grep -oP '(?<=phrase:)[^\n]+' ./keys/t3rn1.key)
 t3rn2_phrase=$(grep -oP '(?<=phrase:)[^\n]+' ./keys/t3rn2.key)
 
@@ -163,4 +161,4 @@ rm -r ./data/{alice,bob,charlie,dave,eve,t3rn1,t3rn2}/*
 
 ## Specs
 
-To *regenerate* chain specs and artifacts simply run `./build-specs.sh`.
+To *regenerate* chain specs and artifacts simply run `./build.sh`.
