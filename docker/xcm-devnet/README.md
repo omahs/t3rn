@@ -4,12 +4,12 @@
 
 ## Run
 
-```nofmt
-mkdir -p ./data/{alice,bob,charlie,t3rn1,t3rn2,pchain}
+``` bash
+mkdir -p ./data/{alice,bob,charlie,dave,eve,t3rn1,t3rn2}
 docker-compose up
 ```
 
-Spins up a rococo local devnet consisting of 3 relay chain validators and 2 collators for each parachain.
+Spins up a rococo local devnet consisting of 5 relay chain validators and 2 collators for each parachain.
 
 After startup run:
 
@@ -48,7 +48,7 @@ to set collator keys that enable t3rn block production.
 
 Then, parachains can be onboarded as illustrated in [this Zenlink README](https://github.com/zenlinkpro/Zenlink-DEX-Module#register-parachain--establish-hrmp-channel) and [this official tutorial](https://docs.substrate.io/tutorials/v3/cumulus/connect-parachain/#parachain-registration).
 
-> **tl;dr** via UI @ `ws://localhost:9944` use pallet `parasSudoWrapper` and extrinsic `sudoScheduleParaInitialize` with `Alice`; genesis state and wasm are @ `./specs/`, parachain ids in the table below
+> **tl;dr** connect UI to `ws://localhost:9944` and use pallet `parasSudoWrapper` and extrinsic `sudoScheduleParaInitialize` with `Alice`; genesis state and wasm are @ `./specs/`, parachain ids in the table below
 
 <table style="margin-bottom:0;">
   <tr>
@@ -92,6 +92,28 @@ Then, parachains can be onboarded as illustrated in [this Zenlink README](https:
     <td>-</td>
   </tr>
   <tr>
+    <td>Rococo</td>
+    <td>Dave</td>
+    <td>10004</td>
+    <td>8847</td>
+    <td>9947</td>
+    <td>-</td>
+    <td>-</td>
+    <td>-</td>
+    <td>-</td>
+  </tr>
+  <tr>
+    <td>Rococo</td>
+    <td>Eve</td>
+    <td>10005</td>
+    <td>8848</td>
+    <td>9948</td>
+    <td>-</td>
+    <td>-</td>
+    <td>-</td>
+    <td>-</td>
+  </tr>
+  <tr>
     <td>t3rn</td>
     <td>t3rn1</td>
     <td>33332</td>
@@ -113,7 +135,7 @@ Then, parachains can be onboarded as illustrated in [this Zenlink README](https:
     <td>9923</td>
     <td>3000</td>
   </tr>
-  <tr>
+  <!-- <tr>
     <td>pchain</td>
     <td>pchain1</td>
     <td>44444</td>
@@ -123,16 +145,20 @@ Then, parachains can be onboarded as illustrated in [this Zenlink README](https:
     <td>4487</td>
     <td>4498</td>
     <td>4000</td>
-  </tr>
+  </tr> -->
 </table>
 
-*The "pchain" is a plain [Substrate parachain instance](https://github.com/substrate-developer-hub/substrate-parachain-template)*. All code uses `polkadot-v0.9.13` Substrate.
+<!-- *The "pchain" is a plain [Substrate parachain instance](https://github.com/substrate-developer-hub/substrate-parachain-template)*. All code uses `polkadot-v0.9.13` Substrate. -->
 
 ## Cleanup
 
-```nofmt
+<!-- ``` bash
 docker-compose down
-rm -r ./data/{alice,bob,charlie,t3rn1,t3rn2,pchain}/*
+rm -r ./data/{alice,bob,charlie,dave,eve,t3rn1,t3rn2,pchain1,pchain2}/*
+``` -->
+``` bash
+docker-compose down
+rm -r ./data/{alice,bob,charlie,dave,eve,t3rn1,t3rn2}/*
 ```
 
 ## Specs

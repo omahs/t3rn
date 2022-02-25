@@ -110,6 +110,81 @@ services:
       --unsafe-rpc-external
       --chain /pdot/rococo-local.raw.json
 
+  dave:
+    image: polkadot:release-v0.9.13
+    build:
+      context: .
+      dockerfile: polkadot.Dockerfile
+    networks:
+      - devnet
+    ports:
+      - "10004:10004"
+      - "8847:8847"
+      - "9947:9947"
+    volumes:
+      - type: bind
+        source: ./specs/rococo-local.raw.json
+        target: /pdot/rococo-local.raw.json
+        read_only: true
+      - type: bind
+        source: ./data/dave
+        target: /pdot/data
+        read_only: false
+    container_name: dave
+    depends_on:
+      - alice
+      - bob
+      - charlie
+    command: >
+      --port 10004
+      --rpc-port 8847
+      --ws-port 9947
+      --dave
+      -d /pdot/data
+      --validator
+      --rpc-cors all
+      --unsafe-ws-external
+      --unsafe-rpc-external
+      --chain /pdot/rococo-local.raw.json
+
+  eve:
+    image: polkadot:release-v0.9.13
+    build:
+      context: .
+      dockerfile: polkadot.Dockerfile
+    networks:
+      - devnet
+    ports:
+      - "10005:10005"
+      - "8848:8848"
+      - "9948:9948"
+    volumes:
+      - type: bind
+        source: ./specs/rococo-local.raw.json
+        target: /pdot/rococo-local.raw.json
+        read_only: true
+      - type: bind
+        source: ./data/eve
+        target: /pdot/data
+        read_only: false
+    container_name: eve
+    depends_on:
+      - alice
+      - bob
+      - charlie
+      - dave
+    command: >
+      --port 10005
+      --rpc-port 8848
+      --ws-port 9948
+      --eve
+      -d /pdot/data
+      --validator
+      --rpc-cors all
+      --unsafe-ws-external
+      --unsafe-rpc-external
+      --chain /pdot/rococo-local.raw.json
+
   t3rn1:
     image: circuit-collator:latest
     build:
@@ -142,6 +217,8 @@ services:
       - alice
       - bob
       - charlie
+      - dave
+      - eve
     command: >
       --port 33333
       --rpc-port 8833
@@ -151,7 +228,7 @@ services:
       --rpc-cors all
       --unsafe-ws-external
       --unsafe-rpc-external
-      --execution=native
+      --execution Wasm
       -lruntime=debug,wasm-executor=debug,cumulus-collator=trace,cumulus-network=trace,cumulus-consensus=trace
       --chain /t3rn/t3rn.raw.json
       --name t3rn1
@@ -195,6 +272,8 @@ services:
       - alice
       - bob
       - charlie
+      - dave
+      - eve
     command: >
       --port 33323
       --rpc-port 8823
@@ -204,7 +283,7 @@ services:
       --rpc-cors all
       --unsafe-ws-external
       --unsafe-rpc-external
-      --execution=native
+      --execution Wasm
       -lruntime=debug,wasm-executor=debug,cumulus-collator=trace,cumulus-network=trace,cumulus-consensus=trace
       --chain /t3rn/t3rn.raw.json
       --name t3rn2
@@ -258,7 +337,7 @@ services:
   #     --rpc-cors all
   #     --unsafe-ws-external
   #     --unsafe-rpc-external
-  #     --execution=native
+  #     --execution Wasm
   #     -lruntime=debug
   #     --chain /para/pchain.raw.json
   #     --

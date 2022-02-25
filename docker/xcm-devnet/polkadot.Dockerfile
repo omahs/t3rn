@@ -37,5 +37,7 @@ VOLUME /pdot/data
 EXPOSE 10001 8844 9944
      # 10002 8845 9945
      # 10003 8846 9946
+     # 10004 8847 9947
+     # 10005 8848 9948
 
 ENTRYPOINT ["/usr/local/bin/polkadot"]
