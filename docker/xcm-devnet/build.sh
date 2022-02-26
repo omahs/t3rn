@@ -25,10 +25,10 @@ subkey generate --scheme Sr25519 > ./keys/t3rn2.key
 subkey generate --scheme Sr25519 > ./keys/pchain1.key
 subkey generate --scheme Sr25519 > ./keys/pchain2.key
 
-t3rn1_adrs=$(grep -oP '(?<=\(SS58\):\s)\S+' ./keys/t3rn1.key)
-t3rn2_adrs=$(grep -oP '(?<=\(SS58\):\s)\S+' ./keys/t3rn2.key)
-pchain1_adrs=$(grep -oP '(?<=\(SS58\):\s)\S+' ./keys/pchain1.key)
-pchain2_adrs=$(grep -oP '(?<=\(SS58\):\s)\S+' ./keys/pchain2.key)
+t3rn1_adrs=$(grep -oP '(?<=\(SS58\):\s)[^\n]+' ./keys/t3rn1.key)
+t3rn2_adrs=$(grep -oP '(?<=\(SS58\):\s)[^\n]+' ./keys/t3rn2.key)
+pchain1_adrs=$(grep -oP '(?<=\(SS58\):\s)[^\n]+' ./keys/pchain1.key)
+pchain2_adrs=$(grep -oP '(?<=\(SS58\):\s)[^\n]+' ./keys/pchain2.key)
 
 ## gen relay chain spec
 
@@ -66,10 +66,10 @@ sed 's/"para_id": [[:digit:]]\+/"para_id": 3000/g' \
     -i ./specs/t3rn.json
 sed 's/"parachainId": [[:digit:]]\+/"parachainId": 3000/g' \
     -i ./specs/t3rn.json
-# set the t3rn1 node node address
+# set the t3rn1 node address
 sed "s/5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY/$t3rn1_adrs/g" \
     -i ./specs/t3rn.json
-# set the t3rn2 node node address
+# set the t3rn2 node address
 sed "s/5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty/$t3rn2_adrs/g" \
     -i ./specs/t3rn.json
 
@@ -97,10 +97,10 @@ sed 's/"para_id": [[:digit:]]\+/"para_id": 4000/g' \
     -i ./specs/pchain.json
 sed 's/"parachainId": [[:digit:]]\+/"parachainId": 4000/g' \
     -i ./specs/pchain.json
-# set the pchain1 node node address
+# set the pchain1 node address
 sed "s/5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY/$pchain1_adrs/g" \
     -i ./specs/pchain.json
-# set the pchain2 node node address
+# set the pchain2 node address
 sed "s/5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty/$pchain2_adrs/g" \
     -i ./specs/pchain.json
 # rm another unprocessable field

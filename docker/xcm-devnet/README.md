@@ -14,6 +14,10 @@ After startup run:
 ``` bash
 t3rn1_phrase=$(grep -oP '(?<=phrase:)[^\n]+' ./keys/t3rn1.key)
 t3rn2_phrase=$(grep -oP '(?<=phrase:)[^\n]+' ./keys/t3rn2.key)
+pchain1_phrase=$(grep -oP '(?<=phrase:)[^\n]+' ./keys/pchain1.key)
+pchain2_phrase=$(grep -oP '(?<=phrase:)[^\n]+' ./keys/pchain2.key)
+pchain1_adrs=$(grep -oP '(?<=\(SS58\):\s)[^\n]+' ./keys/pchain1.key)
+pchain2_adrs=$(grep -oP '(?<=\(SS58\):\s)[^\n]+' ./keys/pchain2.key)
 
 docker exec \
   -u t3rn \
@@ -39,10 +43,21 @@ docker exec \
   --suri "$t3rn2_phrase" \
   --key-type aura
 ```
+<!-- docker exec \
+  -u para \
+  pchain1 \
+  printf \
+  "$pchain1_phrase" \
+  > "/t3rn/data/keystore/61757261${pchain1_adrs#0x}"
 
-to set collator keys that enable t3rn block production.
+docker exec \
+  -u para \
+  pchain2 \
+  printf \
+  "$pchain2_phrase" \
+  > "/t3rn/data/keystore/61757261${pchain2_adrs#0x}" -->
 
-*tbc... ilustrate how to manually insert the node keys into pchain's keystore as 4some reason pchain doesn't have a key>insert subcommand* 
+to set collator keys.
 
 Then, parachains can be onboarded as illustrated in [this Zenlink README](https://github.com/zenlinkpro/Zenlink-DEX-Module#register-parachain--establish-hrmp-channel) and [this official tutorial](https://docs.substrate.io/tutorials/v3/cumulus/connect-parachain/#parachain-registration).
 

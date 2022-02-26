@@ -223,7 +223,8 @@ services:
       --port 33333
       --rpc-port 8833
       --ws-port 9933
-      -d /t3rn/data
+      --base-path /t3rn/data
+      --keystore-path=/t3rn/data/keystore
       --collator
       --rpc-cors all
       --unsafe-ws-external
@@ -278,7 +279,8 @@ services:
       --port 33323
       --rpc-port 8823
       --ws-port 9923
-      -d /t3rn/data
+      --base-path /t3rn/data
+      --keystore-path=/t3rn/data/keystore
       --collator
       --rpc-cors all
       --unsafe-ws-external
