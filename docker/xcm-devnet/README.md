@@ -1,5 +1,7 @@
 # ⚡*CM* devnet WIP ⚠️
 
+https://dev.kilt.io/docs/chain/collator/#generating-session-keys
+https://dev.kilt.io/docs/chain/collator/#troubleshooting
 ## Run
 
 ``` bash
@@ -14,10 +16,6 @@ After startup run:
 ``` bash
 t3rn1_phrase=$(grep -oP '(?<=phrase:)[^\n]+' ./keys/t3rn1.key)
 t3rn2_phrase=$(grep -oP '(?<=phrase:)[^\n]+' ./keys/t3rn2.key)
-pchain1_phrase=$(grep -oP '(?<=phrase:)[^\n]+' ./keys/pchain1.key)
-pchain2_phrase=$(grep -oP '(?<=phrase:)[^\n]+' ./keys/pchain2.key)
-pchain1_adrs=$(grep -oP '(?<=\(SS58\):\s)[^\n]+' ./keys/pchain1.key)
-pchain2_adrs=$(grep -oP '(?<=\(SS58\):\s)[^\n]+' ./keys/pchain2.key)
 
 docker exec \
   -u t3rn \
@@ -43,7 +41,13 @@ docker exec \
   --suri "$t3rn2_phrase" \
   --key-type aura
 ```
-<!-- docker exec \
+<!-- WIP: add 2 pchain collators 2 docker compose
+pchain1_phrase=$(grep -oP '(?<=phrase:)[^\n]+' ./keys/pchain1.key)
+pchain2_phrase=$(grep -oP '(?<=phrase:)[^\n]+' ./keys/pchain2.key)
+pchain1_adrs=$(grep -oP '(?<=\(SS58\):\s)[^\n]+' ./keys/pchain1.key)
+pchain2_adrs=$(grep -oP '(?<=\(SS58\):\s)[^\n]+' ./keys/pchain2.key)
+
+docker exec \
   -u para \
   pchain1 \
   printf \
