@@ -16,7 +16,7 @@ if ! docker inspect parachain-collator:polkadot-v0.9.13 > /dev/null; then
   docker build -t parachain-collator:polkadot-v0.9.13 -f pchain.Dockerfile .
 fi
 
-mkdir ./{keys,specs}
+mkdir -p ./{keys,specs}
 
 ## gen custom node keys 4 the 2 parachains
 
