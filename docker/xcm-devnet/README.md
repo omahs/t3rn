@@ -1,7 +1,7 @@
 # ⚡*CM* devnet WIP ⚠️
 
-https://dev.kilt.io/docs/chain/collator/#generating-session-keys
-https://dev.kilt.io/docs/chain/collator/#troubleshooting
+🚧 stuck @ https://github.com/paritytech/polkadot/blob/9273b5aed4185b97ed23a635252b18bc6d7e7d98/node/collation-generation/src/lib.rs#L304
+
 ## Run
 
 ``` bash

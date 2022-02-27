@@ -42,12 +42,6 @@ docker run \
 sed 's/"nextFreeParaId": [[:digit:]]\+/"nextFreeParaId": 5000/g' \
     -i ./specs/rococo-local.json
 
-sed 's/"id": "rococo_local_testnet",/"id": "rococo-local",/g' \
-    -i ./specs/rococo-local.json
-
-sed 's/"protocolId": "dot",/"protocolId": "rococo-local",/g' \
-    -i ./specs/rococo-local.json
-
 docker run \
     -v "$(pwd)/specs:/usr/local/etc" \
     polkadot:release-v0.9.13 \

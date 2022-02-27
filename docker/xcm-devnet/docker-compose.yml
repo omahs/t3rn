@@ -219,6 +219,8 @@ services:
       - charlie
       - dave
       - eve
+    environment:
+      - RUST_LOG=trace
     command: >
       --port 33333
       --rpc-port 8833
@@ -230,7 +232,7 @@ services:
       --unsafe-ws-external
       --unsafe-rpc-external
       --execution Native
-      -lruntime=debug,wasm-executor=debug,cumulus-collator=trace,cumulus-network=trace,cumulus-consensus=trace
+      -lruntime=debug,cumulus-collator=trace,cumulus-network=trace,cumulus-consensus=trace,aura::cumulus=trace,cumulus-pov-recovery=trace
       --chain /t3rn/t3rn.raw.json
       --name t3rn1
       --
@@ -239,7 +241,7 @@ services:
       --port 33332
       --rpc-port 8832
       --ws-port 9932
-      --execution=wasm
+      --execution Native
 
   t3rn2:
     image: circuit-collator:latest
@@ -286,7 +288,7 @@ services:
       --unsafe-ws-external
       --unsafe-rpc-external
       --execution Native
-      -lruntime=debug,wasm-executor=debug,cumulus-collator=trace,cumulus-network=trace,cumulus-consensus=trace
+      -lruntime=debug,cumulus-collator=trace,cumulus-network=trace,cumulus-consensus=trace,aura::cumulus=trace,cumulus-pov-recovery=trace
       --chain /t3rn/t3rn.raw.json
       --name t3rn2
       --
@@ -295,7 +297,7 @@ services:
       --port 33322
       --rpc-port 8822
       --ws-port 9922
-      --execution=wasm
+      --execution Native
 
   # pchain:
   #   image: parachain-collator:polkadot-v0.9.13
