@@ -172,7 +172,7 @@
           "preopenHrmpChannels": []
         },
         "registrar": {
-          "nextFreeParaId": 5000
+          "nextFreeParaId": 3000
         },
         "sudo": {
           "key": "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY"

@@ -39,7 +39,7 @@ docker run \
     --disable-default-bootnode \
 > ./specs/rococo-local.json
 
-sed 's/"nextFreeParaId": [[:digit:]]\+/"nextFreeParaId": 5000/g' \
+sed 's/"nextFreeParaId": [[:digit:]]\+/"nextFreeParaId": 3000/g' \
     -i ./specs/rococo-local.json
 
 docker run \
