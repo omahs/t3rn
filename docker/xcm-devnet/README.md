@@ -2,8 +2,6 @@
 
 🚧 stuck @ https://github.com/paritytech/polkadot/blob/9273b5aed4185b97ed23a635252b18bc6d7e7d98/node/collation-generation/src/lib.rs#L304
 
-💡 https://github.com/paritytech/polkadot/blob/43dccfb3a4482ae541e7c0c2ce77ebf7b49030dd/roadmap/implementers-guide/src/node/collators/collation-generation.md
-
 ## Run
 
 ``` bash
@@ -68,6 +66,8 @@ to set collator keys.
 Then, parachains can be onboarded as illustrated in [this Zenlink README](https://github.com/zenlinkpro/Zenlink-DEX-Module#register-parachain--establish-hrmp-channel) and [this official tutorial](https://docs.substrate.io/tutorials/v3/cumulus/connect-parachain/#parachain-registration).
 
 > **tl;dr** connect Polkadot Apps UI to `ws://localhost:9944`, using `Alice` [reserve a para id](https://docs.substrate.io/tutorials/v3/cumulus/connect-parachain/#reserve-a-para-id), then [via pallet `parasSudoWrapper` submit extrinsic `sudoScheduleParaInitialize`](https://docs.substrate.io/tutorials/v3/cumulus/connect-parachain/#registration-transaction); genesis state and wasm are @ `./specs/`, parachain ids in the table below
+
+💡 Make sure to use the browser Polkadot Apps UI as the desktop version kept failing to reserve a para id.
 
 <table style="margin-bottom:0;">
   <tr>
