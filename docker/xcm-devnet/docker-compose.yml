@@ -321,7 +321,7 @@ services:
         target: /para/pchain.raw.json
         read_only: true
       - type: bind
-        source: ./data/pchain
+        source: ./data/pchain1
         target: /para/data
         read_only: false
     container_name: pchain1
@@ -335,7 +335,8 @@ services:
       --port 44444
       --rpc-port 4488
       --ws-port 4499
-      -d /para/data
+      --base-path /para/data
+      --keystore-path /para/data/keystore
       --collator
       --force-authoring
       --rpc-cors all
@@ -377,7 +378,7 @@ services:
         target: /para/pchain.raw.json
         read_only: true
       - type: bind
-        source: ./data/pchain
+        source: ./data/pchain2
         target: /para/data
         read_only: false
     container_name: pchain2
@@ -389,9 +390,10 @@ services:
       - eve
     command: >
       --port 44404
-      --rpc-port 4488
-      --ws-port 4499
-      -d /para/data
+      --rpc-port 4408
+      --ws-port 4409
+      --base-path /para/data
+      --keystore-path /para/data/keystore
       --collator
       --force-authoring
       --rpc-cors all
@@ -404,7 +406,7 @@ services:
       --
       --chain /para/rococo-local.raw.json
       --discover-local
-      --port 44443
-      --rpc-port 4487
-      --ws-port 4498
+      --port 44403
+      --rpc-port 4407
+      --ws-port 4418
       --execution Native

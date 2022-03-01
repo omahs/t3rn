@@ -3,8 +3,9 @@
 ## Run
 
 ``` bash
-mkdir -p ./data/{alice,bob,charlie,dave,eve,t3rn1,t3rn2}
-docker-compose up
+mkdir -p ./data/{alice,bob,charlie,dave,eve,t3rn1,t3rn2,pchain1,pchain2}
+./dbg.sh
+# docker-compose up
 ```
 
 Spins up a rococo local devnet consisting of 5 relay chain validators and 2 collators for each parachain.
@@ -12,54 +13,45 @@ Spins up a rococo local devnet consisting of 5 relay chain validators and 2 coll
 After startup run:
 
 ``` bash
-t3rn1_phrase=$(grep -oP '(?<=phrase:)[^\n]+' ./keys/t3rn1.key)
-t3rn2_phrase=$(grep -oP '(?<=phrase:)[^\n]+' ./keys/t3rn2.key)
-
-docker exec \
-  -u t3rn \
-  t3rn1 \
-  circuit-collator \
-  key \
-  insert \
-  --base-path /t3rn/data \
-  --chain /t3rn/t3rn.raw.json \
-  --scheme Sr25519 \
-  --suri "$t3rn1_phrase" \
-  --key-type aura
-
-docker exec \
-  -u t3rn \
-  t3rn2 \
-  circuit-collator \
-  key \
-  insert \
-  --base-path /t3rn/data \
-  --chain /t3rn/t3rn.raw.json \
-  --scheme Sr25519 \
-  --suri "$t3rn2_phrase" \
-  --key-type aura
-
 pchain1_phrase=$(grep -oP '(?<=phrase:)[^\n]+' ./keys/pchain1.key)
 pchain2_phrase=$(grep -oP '(?<=phrase:)[^\n]+' ./keys/pchain2.key)
 pchain1_adrs=$(grep -oP '(?<=\(SS58\):\s)[^\n]+' ./keys/pchain1.key)
 pchain2_adrs=$(grep -oP '(?<=\(SS58\):\s)[^\n]+' ./keys/pchain2.key)
 
-docker exec \
-  -u para \
-  pchain1 \
-  printf \
-  "$pchain1_phrase" \
-  > "/t3rn/data/keystore/61757261${pchain1_adrs#0x}"
+printf "$pchain1_phrase" > ./data/pchain1/keystore/61757261${pchain1_adrs#0x}
+printf "$pchain2_phrase" > ./data/pchain2/keystore/61757261${pchain2_adrs#0x}
 
-docker exec \
-  -u para \
-  pchain2 \
-  printf \
-  "$pchain2_phrase" \
-  > "/t3rn/data/keystore/61757261${pchain2_adrs#0x}"
+# t3rn1_phrase=$(grep -oP '(?<=phrase:)[^\n]+' ./keys/t3rn1.key)
+# t3rn2_phrase=$(grep -oP '(?<=phrase:)[^\n]+' ./keys/t3rn2.key)
+
+# docker exec \
+#   -u t3rn \
+#   t3rn1 \
+#   circuit-collator \
+#   key \
+#   insert \
+#   --base-path /t3rn/data \
+#   --chain /t3rn/t3rn.raw.json \
+#   --scheme Sr25519 \
+#   --suri "$t3rn1_phrase" \
+#   --key-type aura
+
+# docker exec \
+#   -u t3rn \
+#   t3rn2 \
+#   circuit-collator \
+#   key \
+#   insert \
+#   --base-path /t3rn/data \
+#   --chain /t3rn/t3rn.raw.json \
+#   --scheme Sr25519 \
+#   --suri "$t3rn2_phrase" \
+#   --key-type aura
 ```
 
 to set collator keys.
+
+🚑 ...Now handle sudo 4 the pchain template 2 continue with para id reservation & parachain registration...
 
 Then, parachains can be onboarded as illustrated in [this Zenlink README](https://github.com/zenlinkpro/Zenlink-DEX-Module#register-parachain--establish-hrmp-channel) and [this official tutorial](https://docs.substrate.io/tutorials/v3/cumulus/connect-parachain/#parachain-registration).
 
