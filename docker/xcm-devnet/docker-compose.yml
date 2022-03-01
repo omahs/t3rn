@@ -185,169 +185,226 @@ services:
       --unsafe-rpc-external
       --chain /pdot/rococo-local.raw.json
 
-  t3rn1:
-    image: circuit-collator:latest
-    build:
-      context: ../..
-      dockerfile: docker/xcm-devnet/t3rn.Dockerfile
-    networks:
-      - devnet
-    ports:
-      - "33333:33333"
-      - "8833:8833"
-      - "9933:9933"
-      - "33332:33332"
-      - "8832:8832"
-      - "9932:9932"
-    volumes:
-      - type: bind
-        source: ./specs/rococo-local.raw.json
-        target: /t3rn/rococo-local.raw.json
-        read_only: true
-      - type: bind
-        source: ./specs/t3rn.raw.json
-        target: /t3rn/t3rn.raw.json
-        read_only: true
-      - type: bind
-        source: ./data/t3rn1
-        target: /t3rn/data
-        read_only: false
-    container_name: t3rn1
-    depends_on:
-      - alice
-      - bob
-      - charlie
-      - dave
-      - eve
-    # environment:
-    #   - RUST_LOG=trace
-    command: >
-      --port 33333
-      --rpc-port 8833
-      --ws-port 9933
-      --base-path /t3rn/data
-      --keystore-path=/t3rn/data/keystore
-      --collator
-      --rpc-cors all
-      --unsafe-ws-external
-      --unsafe-rpc-external
-      --execution Native
-      -lruntime=debug,cumulus-collator=trace,cumulus-network=trace,cumulus-consensus=trace,aura::cumulus=trace,cumulus-pov-recovery=trace,executor=trace
-      --chain /t3rn/t3rn.raw.json
-      --name t3rn1
-      --
-      --chain /t3rn/rococo-local.raw.json
-      --discover-local
-      --port 33332
-      --rpc-port 8832
-      --ws-port 9932
-      --execution Native
-
-  t3rn2:
-    image: circuit-collator:latest
-    build:
-      context: ../..
-      dockerfile: docker/xcm-devnet/t3rn.Dockerfile
-    networks:
-      - devnet
-    ports:
-      - "33322:33322"
-      - "8822:8822"
-      - "9922:9922"
-      - "33323:33323"
-      - "8823:8823"
-      - "9923:9923"
-    volumes:
-      - type: bind
-        source: ./specs/rococo-local.raw.json
-        target: /t3rn/rococo-local.raw.json
-        read_only: true
-      - type: bind
-        source: ./specs/t3rn.raw.json
-        target: /t3rn/t3rn.raw.json
-        read_only: true
-      - type: bind
-        source: ./data/t3rn2
-        target: /t3rn/data
-        read_only: false
-    container_name: t3rn2
-    depends_on:
-      - alice
-      - bob
-      - charlie
-      - dave
-      - eve
-    command: >
-      --port 33323
-      --rpc-port 8823
-      --ws-port 9923
-      --base-path /t3rn/data
-      --keystore-path=/t3rn/data/keystore
-      --collator
-      --rpc-cors all
-      --unsafe-ws-external
-      --unsafe-rpc-external
-      --execution Native
-      -lruntime=debug,cumulus-collator=trace,cumulus-network=trace,cumulus-consensus=trace,aura::cumulus=trace,cumulus-pov-recovery=trace,executor=trace
-      --chain /t3rn/t3rn.raw.json
-      --name t3rn2
-      --
-      --chain /t3rn/rococo-local.raw.json
-      --discover-local
-      --port 33322
-      --rpc-port 8822
-      --ws-port 9922
-      --execution Native
-
-  # pchain:
-  #   image: parachain-collator:polkadot-v0.9.13
+  # t3rn1:
+  #   image: circuit-collator:latest
   #   build:
-  #     context: .
-  #     dockerfile: pchain.Dockerfile
+  #     context: ../..
+  #     dockerfile: docker/xcm-devnet/t3rn.Dockerfile
   #   networks:
   #     - devnet
   #   ports:
-  #     - "44444:44444"
-  #     - "4488:4488"
-  #     - "4499:4499"
-  #     - "44443:44443"
-  #     - "4487:4487"
-  #     - "4498:4498"
+  #     - "33333:33333"
+  #     - "8833:8833"
+  #     - "9933:9933"
+  #     - "33332:33332"
+  #     - "8832:8832"
+  #     - "9932:9932"
   #   volumes:
   #     - type: bind
   #       source: ./specs/rococo-local.raw.json
-  #       target: /para/rococo-local.raw.json
+  #       target: /t3rn/rococo-local.raw.json
   #       read_only: true
   #     - type: bind
-  #       source: ./specs/pchain.raw.json
-  #       target: /para/pchain.raw.json
+  #       source: ./specs/t3rn.raw.json
+  #       target: /t3rn/t3rn.raw.json
   #       read_only: true
   #     - type: bind
-  #       source: ./data/pchain
-  #       target: /para/data
+  #       source: ./data/t3rn1
+  #       target: /t3rn/data
   #       read_only: false
-  #   container_name: pchain
+  #   container_name: t3rn1
   #   depends_on:
   #     - alice
   #     - bob
   #     - charlie
+  #     - dave
+  #     - eve
   #   command: >
-  #     --port 44444
-  #     --rpc-port 4488
-  #     --ws-port 4499
-  #     -d /para/data
+  #     --port 33333
+  #     --rpc-port 8833
+  #     --ws-port 9933
+  #     --base-path /t3rn/data
+  #     --keystore-path=/t3rn/data/keystore
   #     --collator
-  #     --force-authoring
   #     --rpc-cors all
   #     --unsafe-ws-external
   #     --unsafe-rpc-external
   #     --execution Native
-  #     -lruntime=debug
-  #     --chain /para/pchain.raw.json
+  #     -lruntime=warn,cumulus-collator=debug,cumulus-network=warn,cumulus-consensus=warn,cumulus-pov-recovery=warn,executor=warn
+  #     --chain /t3rn/t3rn.raw.json
+  #     --name t3rn1
   #     --
-  #     --chain /para/rococo-local.raw.json
+  #     --chain /t3rn/rococo-local.raw.json
   #     --discover-local
-  #     --port 44443
-  #     --rpc-port 4487
-  #     --ws-port 4498
-  #     --execution=wasm
+  #     --port 33332
+  #     --rpc-port 8832
+  #     --ws-port 9932
+  #     --execution Native
+
+  # t3rn2:
+  #   image: circuit-collator:latest
+  #   build:
+  #     context: ../..
+  #     dockerfile: docker/xcm-devnet/t3rn.Dockerfile
+  #   networks:
+  #     - devnet
+  #   ports:
+  #     - "33322:33322"
+  #     - "8822:8822"
+  #     - "9922:9922"
+  #     - "33323:33323"
+  #     - "8823:8823"
+  #     - "9923:9923"
+  #   volumes:
+  #     - type: bind
+  #       source: ./specs/rococo-local.raw.json
+  #       target: /t3rn/rococo-local.raw.json
+  #       read_only: true
+  #     - type: bind
+  #       source: ./specs/t3rn.raw.json
+  #       target: /t3rn/t3rn.raw.json
+  #       read_only: true
+  #     - type: bind
+  #       source: ./data/t3rn2
+  #       target: /t3rn/data
+  #       read_only: false
+  #   container_name: t3rn2
+  #   depends_on:
+  #     - alice
+  #     - bob
+  #     - charlie
+  #     - dave
+  #     - eve
+  #   command: >
+  #     --port 33323
+  #     --rpc-port 8823
+  #     --ws-port 9923
+  #     --base-path /t3rn/data
+  #     --keystore-path=/t3rn/data/keystore
+  #     --collator
+  #     --rpc-cors all
+  #     --unsafe-ws-external
+  #     --unsafe-rpc-external
+  #     --execution Native
+  #     -lruntime=warn,cumulus-collator=debug,cumulus-network=warn,cumulus-consensus=warn,cumulus-pov-recovery=warn,executor=warn
+  #     --chain /t3rn/t3rn.raw.json
+  #     --name t3rn2
+  #     --
+  #     --chain /t3rn/rococo-local.raw.json
+  #     --discover-local
+  #     --port 33322
+  #     --rpc-port 8822
+  #     --ws-port 9922
+  #     --execution Native
+
+  pchain1:
+    image: parachain-collator:polkadot-v0.9.13
+    build:
+      context: .
+      dockerfile: pchain.Dockerfile
+    networks:
+      - devnet
+    ports:
+      - "44444:44444"
+      - "4488:4488"
+      - "4499:4499"
+      - "44443:44443"
+      - "4487:4487"
+      - "4498:4498"
+    volumes:
+      - type: bind
+        source: ./specs/rococo-local.raw.json
+        target: /para/rococo-local.raw.json
+        read_only: true
+      - type: bind
+        source: ./specs/pchain.raw.json
+        target: /para/pchain.raw.json
+        read_only: true
+      - type: bind
+        source: ./data/pchain
+        target: /para/data
+        read_only: false
+    container_name: pchain1
+    depends_on:
+      - alice
+      - bob
+      - charlie
+      - dave
+      - eve
+    command: >
+      --port 44444
+      --rpc-port 4488
+      --ws-port 4499
+      -d /para/data
+      --collator
+      --force-authoring
+      --rpc-cors all
+      --unsafe-ws-external
+      --unsafe-rpc-external
+      --execution Native
+      -lruntime=warn,cumulus-collator=debug,cumulus-network=warn,cumulus-consensus=warn,cumulus-pov-recovery=warn,executor=warn
+      --chain /para/pchain.raw.json
+      --name pchain1
+      --
+      --chain /para/rococo-local.raw.json
+      --discover-local
+      --port 44443
+      --rpc-port 4487
+      --ws-port 4498
+      --execution Native
+
+  pchain2:
+    image: parachain-collator:polkadot-v0.9.13
+    build:
+      context: .
+      dockerfile: pchain.Dockerfile
+    networks:
+      - devnet
+    ports:
+      - "44404:44404"
+      - "4408:4408"
+      - "4409:4409"
+      - "44403:44403"
+      - "4407:4407"
+      - "4418:4418"
+    volumes:
+      - type: bind
+        source: ./specs/rococo-local.raw.json
+        target: /para/rococo-local.raw.json
+        read_only: true
+      - type: bind
+        source: ./specs/pchain.raw.json
+        target: /para/pchain.raw.json
+        read_only: true
+      - type: bind
+        source: ./data/pchain
+        target: /para/data
+        read_only: false
+    container_name: pchain2
+    depends_on:
+      - alice
+      - bob
+      - charlie
+      - dave
+      - eve
+    command: >
+      --port 44404
+      --rpc-port 4488
+      --ws-port 4499
+      -d /para/data
+      --collator
+      --force-authoring
+      --rpc-cors all
+      --unsafe-ws-external
+      --unsafe-rpc-external
+      --execution Native
+      -lruntime=warn,cumulus-collator=debug,cumulus-network=warn,cumulus-consensus=warn,cumulus-pov-recovery=warn,executor=warn
+      --chain /para/pchain.raw.json
+      --name pchain2
+      --
+      --chain /para/rococo-local.raw.json
+      --discover-local
+      --port 44443
+      --rpc-port 4487
+      --ws-port 4498
+      --execution Native
