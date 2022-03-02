@@ -18,8 +18,8 @@ pchain2_phrase=$(grep -oP '(?<=phrase:)[^\n]+' ./keys/pchain2.key)
 pchain1_adrs=$(grep -oP '(?<=\(SS58\):\s)[^\n]+' ./keys/pchain1.key)
 pchain2_adrs=$(grep -oP '(?<=\(SS58\):\s)[^\n]+' ./keys/pchain2.key)
 
-printf "$pchain1_phrase" > ./data/pchain1/keystore/61757261${pchain1_adrs#0x}
-printf "$pchain2_phrase" > ./data/pchain2/keystore/61757261${pchain2_adrs#0x}
+printf "$pchain1_phrase" > ./data/pchain1/chains/local_testnet/keystore/61757261${pchain1_adrs#0x}
+printf "$pchain2_phrase" > ./data/pchain2/chains/local_testnet/keystore/61757261${pchain2_adrs#0x}
 
 # t3rn1_phrase=$(grep -oP '(?<=phrase:)[^\n]+' ./keys/t3rn1.key)
 # t3rn2_phrase=$(grep -oP '(?<=phrase:)[^\n]+' ./keys/t3rn2.key)
@@ -50,8 +50,6 @@ printf "$pchain2_phrase" > ./data/pchain2/keystore/61757261${pchain2_adrs#0x}
 ```
 
 to set collator keys.
-
-🚑 ...Now handle sudo 4 the pchain template 2 continue with para id reservation & parachain registration...
 
 Then, parachains can be onboarded as illustrated in [this Zenlink README](https://github.com/zenlinkpro/Zenlink-DEX-Module#register-parachain--establish-hrmp-channel) and [this official tutorial](https://docs.substrate.io/tutorials/v3/cumulus/connect-parachain/#parachain-registration).
 

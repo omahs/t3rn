@@ -224,7 +224,7 @@ services:
   #     --rpc-port 8833
   #     --ws-port 9933
   #     --base-path /t3rn/data
-  #     --keystore-path=/t3rn/data/keystore
+  #     --keystore-path /t3rn/data/chains/local_testnet/keystore
   #     --collator
   #     --rpc-cors all
   #     --unsafe-ws-external
@@ -280,7 +280,7 @@ services:
   #     --rpc-port 8823
   #     --ws-port 9923
   #     --base-path /t3rn/data
-  #     --keystore-path=/t3rn/data/keystore
+  #     --keystore-path /t3rn/data/chains/local_testnet/keystore
   #     --collator
   #     --rpc-cors all
   #     --unsafe-ws-external
@@ -336,7 +336,7 @@ services:
       --rpc-port 4488
       --ws-port 4499
       --base-path /para/data
-      --keystore-path /para/data/keystore
+      --keystore-path /para/data/chains/local_testnet/keystore
       --collator
       --force-authoring
       --rpc-cors all
@@ -393,7 +393,7 @@ services:
       --rpc-port 4408
       --ws-port 4409
       --base-path /para/data
-      --keystore-path /para/data/keystore
+      --keystore-path /para/data/chains/local_testnet/keystore
       --collator
       --force-authoring
       --rpc-cors all

@@ -95,7 +95,7 @@ docker run \
   --rpc-port 4488 \
   --ws-port 4499 \
   --base-path /para/data \
-  --keystore-path /para/data/keystore \
+  --keystore-path /para/data/chains/local_testnet/keystore \
   --collator \
   --force-authoring \
   --rpc-cors all \
@@ -124,7 +124,7 @@ docker run \
   --rpc-port 4408 \
   --ws-port 4409 \
   --base-path /para/data \
-  --keystore-path /para/data/keystore \
+  --keystore-path /para/data/chains/local_testnet/keystore \
   --collator \
   --force-authoring \
   --rpc-cors all \
