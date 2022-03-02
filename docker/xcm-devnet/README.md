@@ -4,8 +4,7 @@
 
 ``` bash
 mkdir -p ./data/{alice,bob,charlie,dave,eve,t3rn1,t3rn2,pchain1,pchain2}
-./dbg.sh
-# docker-compose up
+docker-compose up
 ```
 
 Spins up a rococo local devnet consisting of 5 relay chain validators and 2 collators for each parachain.
@@ -13,47 +12,47 @@ Spins up a rococo local devnet consisting of 5 relay chain validators and 2 coll
 After startup run:
 
 ``` bash
-pchain1_phrase=$(grep -oP '(?<=phrase:)[^\n]+' ./keys/pchain1.key)
-pchain2_phrase=$(grep -oP '(?<=phrase:)[^\n]+' ./keys/pchain2.key)
+pchain1_phrase=$(grep -oP '(?<=phrase:)[^\n]+' ./keys/pchain1.key | xargs)
+pchain2_phrase=$(grep -oP '(?<=phrase:)[^\n]+' ./keys/pchain2.key | xargs)
 pchain1_adrs=$(grep -oP '(?<=\(SS58\):\s)[^\n]+' ./keys/pchain1.key)
 pchain2_adrs=$(grep -oP '(?<=\(SS58\):\s)[^\n]+' ./keys/pchain2.key)
 
 printf "$pchain1_phrase" > ./data/pchain1/chains/local_testnet/keystore/61757261${pchain1_adrs#0x}
 printf "$pchain2_phrase" > ./data/pchain2/chains/local_testnet/keystore/61757261${pchain2_adrs#0x}
 
-# t3rn1_phrase=$(grep -oP '(?<=phrase:)[^\n]+' ./keys/t3rn1.key)
-# t3rn2_phrase=$(grep -oP '(?<=phrase:)[^\n]+' ./keys/t3rn2.key)
+t3rn1_phrase=$(grep -oP '(?<=phrase:)[^\n]+' ./keys/t3rn1.key | xargs)
+t3rn2_phrase=$(grep -oP '(?<=phrase:)[^\n]+' ./keys/t3rn2.key | xargs)
 
-# docker exec \
-#   -u t3rn \
-#   t3rn1 \
-#   circuit-collator \
-#   key \
-#   insert \
-#   --base-path /t3rn/data \
-#   --chain /t3rn/t3rn.raw.json \
-#   --scheme Sr25519 \
-#   --suri "$t3rn1_phrase" \
-#   --key-type aura
+docker exec \
+  -u t3rn \
+  t3rn1 \
+  circuit-collator \
+  key \
+  insert \
+  --base-path /t3rn/data \
+  --chain /t3rn/t3rn.raw.json \
+  --scheme Sr25519 \
+  --suri "$t3rn1_phrase" \
+  --key-type aura
 
-# docker exec \
-#   -u t3rn \
-#   t3rn2 \
-#   circuit-collator \
-#   key \
-#   insert \
-#   --base-path /t3rn/data \
-#   --chain /t3rn/t3rn.raw.json \
-#   --scheme Sr25519 \
-#   --suri "$t3rn2_phrase" \
-#   --key-type aura
+docker exec \
+  -u t3rn \
+  t3rn2 \
+  circuit-collator \
+  key \
+  insert \
+  --base-path /t3rn/data \
+  --chain /t3rn/t3rn.raw.json \
+  --scheme Sr25519 \
+  --suri "$t3rn2_phrase" \
+  --key-type aura
 ```
 
 to set collator keys.
 
 Then, parachains can be onboarded as illustrated in [this Zenlink README](https://github.com/zenlinkpro/Zenlink-DEX-Module#register-parachain--establish-hrmp-channel) and [this official tutorial](https://docs.substrate.io/tutorials/v3/cumulus/connect-parachain/#parachain-registration).
 
-> **tl;dr** connect Polkadot Apps UI to `ws://localhost:9944`, using `Alice` [reserve a para id](https://docs.substrate.io/tutorials/v3/cumulus/connect-parachain/#reserve-a-para-id), then [via pallet `parasSudoWrapper` submit extrinsic `sudoScheduleParaInitialize`](https://docs.substrate.io/tutorials/v3/cumulus/connect-parachain/#registration-transaction); genesis state and wasm are @ `./specs/`, parachain ids in the table below => 💡 use the browser Polkadot Apps UI as the desktop version kept failing to reserve a para id.
+> **tl;dr** connect Polkadot Apps UI to `ws://localhost:9944`, using `Alice` [reserve a para id](https://docs.substrate.io/tutorials/v3/cumulus/connect-parachain/#reserve-a-para-id), then [via pallet `parasSudoWrapper` submit extrinsic `sudoScheduleParaInitialize`](https://docs.substrate.io/tutorials/v3/cumulus/connect-parachain/#registration-transaction); genesis state and wasm are @ `./specs/`, parachain ids in the table below => 💡 use the browser Polkadot Apps UI as the desktop version kept failing to reserve a para id...
 
 <table style="margin-bottom:0;">
   <tr>
@@ -176,3 +175,7 @@ rm -r ./data/{alice,bob,charlie,dave,eve,t3rn1,t3rn2,pchain1,pchain2}/*
 ## Specs
 
 To *regenerate* chain specs and artifacts simply run `./build.sh`.
+
+📚
+
++ https://github.com/paritytech/substrate/pull/10906
