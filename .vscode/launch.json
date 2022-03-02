@@ -4,12 +4,31 @@
         {
             "type": "lldb",
             "request": "launch",
-            "name": "Circuit",
-            "program": "${workspaceFolder}/circuit/target/debug/circuit",
+            "name": "circuit-collator",
+            "program": "${workspaceFolder}/target/debug/circuit-collator",
             "args": [
-                "--dev"
+                     "--port=33333",
+                     "--rpc-port=8833",
+                     "--ws-port=9933",
+                     "--base-path=./data/t3rn1",
+                     "--keystore-path=./data/t3rn1/keystore",
+                     "--collator",
+                     "--rpc-cors=all",
+                     "--unsafe-ws-external",
+                     "--unsafe-rpc-external",
+                     "--execution=Native",
+                     "-lruntime=debug,cumulus-collator=trace,cumulus-network=trace,cumulus-consensus=trace,aura::cumulus=trace,cumulus-pov-recovery=trace,executor=trace,wasm-executor=trace",
+                     "--chain=./specs/t3rn.raw.json",
+                     "--name=t3rn1",
+                     "--",
+                     "--chain=./specs/rococo-local.raw.json",
+                     "--discover-local",
+                     "--port=33332",
+                     "--rpc-port=8832",
+                     "--ws-port=9932",
+                     "--execution=Native",
             ],
-            "cwd": "${workspaceFolder}"
-        }
+            "cwd": "${workspaceFolder}/docker/xcm-devnet"
+        },
     ]
 }
