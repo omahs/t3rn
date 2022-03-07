@@ -170,6 +170,12 @@ set_keys() {
 }
 
 onboard() {
+  npx --yes @polkadot/api-cli@beta \
+    --ws 'ws://localhost:9944' \
+    --sudo \
+    --seed '//Alice' \
+    tx.registrar.reserve
+
   printf \
     "%s {\"genesisHead\":\"%s\",\"validationCode\":\"%s\",\"parachain\":true}" \
     3000 \
@@ -181,14 +187,14 @@ onboard() {
     --ws 'ws://localhost:9944' \
     --sudo \
     --seed '//Alice' \
-    tx.registrar.reserve
+    --params /tmp/t3rn.params \
+    tx.parasSudoWrapper.sudoScheduleParaInitialize
 
   npx @polkadot/api-cli@beta \
     --ws 'ws://localhost:9944' \
     --sudo \
     --seed '//Alice' \
-    --params /tmp/t3rn.params \
-    tx.parasSudoWrapper.sudoScheduleParaInitialize
+    tx.registrar.reserve
 
   printf \
     "%s {\"genesisHead\":\"%s\",\"validationCode\":\"%s\",\"parachain\":true}" \
@@ -196,18 +202,14 @@ onboard() {
     $(<./specs/pchain.genesis) \
     $(<./specs/pchain.wasm) \
     > /tmp/pchain.params
-
-  npx @polkadot/api-cli@beta \
-    --ws 'ws://localhost:9944' \
-    --sudo \
-    --seed '//Alice' \
-    tx.registrar.reserve
-
+  # FIXME: below fails with DispatchError BadOrigin
   npx @polkadot/api-cli@beta \
     --ws 'ws://localhost:9944' \
     --seed '//Alice' \
     --params /tmp/pchain.params \
     tx.parasSudoWrapper.sudoScheduleParaInitialize
+
+    rm /tmp/{pchain.params,t3rn.params}
 }
 
 case ${1:-devnet} in
@@ -217,6 +219,9 @@ devnet|dev|net)
   ;;
 setkeys|keys)
   set_keys
+  ;;
+onboard|board)
+  onboard
   ;;
 clean|cleanup)
   docker-compose down
