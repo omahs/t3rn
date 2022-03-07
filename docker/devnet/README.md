@@ -1,10 +1,14 @@
 # ⚡*CM* devnet WIP ⚠️
 
-##  `./run.sh`
+##  `./run.sh devnet` | `./run.sh dev` | `./run.sh net` 
 
 Spins up a rococo local devnet consisting of 5 relay chain validators and 2 collators for each parachain.
 
-Then, parachains can be onboarded as illustrated in [this official tutorial](https://docs.substrate.io/tutorials/v3/cumulus/connect-parachain/#parachain-registration).
+##  `./run.sh setkeys` | `./run.sh keys`
+
+Inserts static collator keys into the nodes' keystores. Must be run after `./run.sh devnet`.
+
+After having run the `devnet` and `setkeys` subcommands above, parachains can be onboarded as illustrated in [this official tutorial](https://docs.substrate.io/tutorials/v3/cumulus/connect-parachain/#parachain-registration).
 
 ### tl;dr
 
@@ -14,15 +18,15 @@ Then, parachains can be onboarded as illustrated in [this official tutorial](htt
   + See `./specs` for genesis state and wasm
   + Parachain ids are in the table below
 
-## `./run.sh cleanup`
+## `./run.sh cleanup` | `./run.sh clean`
 
 Stops all nodes and swipes their base path data directories.
 
-## `./run.sh build` 
+## `./run.sh build` | `./run.sh make` | `./run.sh mk` 
 
 Builds docker images and *regenerates* chain specs, and collator keys. Only necessary if any of the runtimes have changed.
 
-## Overview
+## Topology
 
 <table style="margin-bottom:0;">
   <tr>

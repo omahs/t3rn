@@ -15,17 +15,15 @@ build_docker_images() {
   fi
 }
 
-keygen_collators() {
-  mkdir -p ./keys
+keygen() {
   ## gen custom node keys 4 the 2 parachains
-  subkey generate --scheme Sr25519 > ./keys/t3rn1.key
-  subkey generate --scheme Sr25519 > ./keys/t3rn2.key
-  subkey generate --scheme Sr25519 > ./keys/pchain1.key
-  subkey generate --scheme Sr25519 > ./keys/pchain2.key
+  subkey generate --scheme Sr25519 > ./specs/t3rn1.key
+  subkey generate --scheme Sr25519 > ./specs/t3rn2.key
+  subkey generate --scheme Sr25519 > ./specs/pchain1.key
+  subkey generate --scheme Sr25519 > ./specs/pchain2.key
 }
 
 build_relay_chain_spec() {
-  mkdir -p ./specs
   docker run \
       polkadot:release-v0.9.13 \
       build-spec \
@@ -44,13 +42,12 @@ build_relay_chain_spec() {
   > ./specs/rococo-local.raw.json
 }
 
-build_paras_chain_specs() {
+build_para_chain_specs() {
   # NOTE: included parachain ids should stay in sync with those in README.md
-  mkdir -p ./specs
-  t3rn1_adrs=$(grep -oP '(?<=\(SS58\):\s)[^\n]+' ./keys/t3rn1.key)
-  t3rn2_adrs=$(grep -oP '(?<=\(SS58\):\s)[^\n]+' ./keys/t3rn2.key)
-  pchain1_adrs=$(grep -oP '(?<=\(SS58\):\s)[^\n]+' ./keys/pchain1.key)
-  pchain2_adrs=$(grep -oP '(?<=\(SS58\):\s)[^\n]+' ./keys/pchain2.key)
+  t3rn1_adrs=$(grep -oP '(?<=\(SS58\):\s)[^\n]+' ./specs/t3rn1.key)
+  t3rn2_adrs=$(grep -oP '(?<=\(SS58\):\s)[^\n]+' ./specs/t3rn2.key)
+  pchain1_adrs=$(grep -oP '(?<=\(SS58\):\s)[^\n]+' ./specs/pchain1.key)
+  pchain2_adrs=$(grep -oP '(?<=\(SS58\):\s)[^\n]+' ./specs/pchain2.key)
   ## gen t3rn chain spec
   docker run circuit-collator:lean build-spec \
       --disable-default-bootnode \
@@ -110,7 +107,7 @@ build_paras_chain_specs() {
   > ./specs/pchain.raw.json
 }
 
-build_paras_genesis_states() {
+build_para_genesis_states() {
   docker run \
       -v "$(pwd)/specs:/usr/local/etc" \
       circuit-collator:lean \
@@ -125,7 +122,7 @@ build_paras_genesis_states() {
   > ./specs/pchain.genesis
 }
 
-build_paras_wasm_runtimes() {
+build_para_wasm_runtimes() {
   docker run \
       -v "$(pwd)/specs:/usr/local/etc" \
       parachain-collator:polkadot-v0.9.13 \
@@ -136,13 +133,13 @@ build_paras_wasm_runtimes() {
   > ./specs/t3rn.wasm
 }
 
-set_collators_keys() {
-  t3rn1_phrase="$(grep -oP '(?<=phrase:)[^\n]+' ./keys/t3rn1.key | xargs)"
-  t3rn2_phrase="$(grep -oP '(?<=phrase:)[^\n]+' ./keys/t3rn2.key | xargs)"
-  pchain1_phrase="$(grep -oP '(?<=phrase:)[^\n]+' ./keys/pchain1.key | xargs)"
-  pchain2_phrase="$(grep -oP '(?<=phrase:)[^\n]+' ./keys/pchain2.key | xargs)"
-  pchain1_adrs="$(grep -oP '(?<=\(SS58\):\s)[^\n]+' ./keys/pchain1.key)"
-  pchain2_adrs="$(grep -oP '(?<=\(SS58\):\s)[^\n]+' ./keys/pchain2.key)"
+set_keys() {
+  t3rn1_phrase="$(grep -oP '(?<=phrase:)[^\n]+' ./specs/t3rn1.key | xargs)"
+  t3rn2_phrase="$(grep -oP '(?<=phrase:)[^\n]+' ./specs/t3rn2.key | xargs)"
+  pchain1_phrase="$(grep -oP '(?<=phrase:)[^\n]+' ./specs/pchain1.key | xargs)"
+  pchain2_phrase="$(grep -oP '(?<=phrase:)[^\n]+' ./specs/pchain2.key | xargs)"
+  pchain1_adrs="$(grep -oP '(?<=\(SS58\):\s)[^\n]+' ./specs/pchain1.key)"
+  pchain2_adrs="$(grep -oP '(?<=\(SS58\):\s)[^\n]+' ./specs/pchain2.key)"
 
   docker exec \
     -u t3rn \
@@ -175,20 +172,22 @@ set_collators_keys() {
 case ${1:-devnet} in
 devnet|dev|net)
   mkdir -p ./data/{alice,bob,charlie,dave,eve,t3rn1,t3rn2,pchain1,pchain2}
-  docker-compose up > /dev/null &
-  sleep 3.333 # allow all nodes 2 setup their base paths incl. keystores
-  set_collators_keys
+  docker-compose up > /dev/null
+  ;;
+setkeys|keys)
+  set_keys
   ;;
 clean|cleanup)
   docker-compose down
   rm -r ./data/{alice,bob,charlie,dave,eve,t3rn1,t3rn2,pchain1,pchain2}/*
   ;;
 build|make|mk)
+  mkdir -p ./specs
   build_docker_images
-  keygen_collators
+  keygen
   build_relay_chain_spec
-  build_paras_chain_specs
-  build_paras_genesis_states
-  build_paras_wasm_runtimes
+  build_para_chain_specs
+  build_para_genesis_states
+  build_para_wasm_runtimes
   ;;
 esac
