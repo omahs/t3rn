@@ -169,6 +169,47 @@ set_keys() {
   echo "$pchain2_phrase" > "./data/pchain2/chains/local_testnet/keystore/61757261${pchain2_adrs#0x}"
 }
 
+onboard() {
+  printf \
+    "%s {\"genesisHead\":\"%s\",\"validationCode\":\"%s\",\"parachain\":true}" \
+    3000 \
+    $(<./specs/t3rn.genesis) \
+    $(<./specs/t3rn.wasm) \
+    > /tmp/t3rn.params
+
+  npx @polkadot/api-cli@beta \
+    --ws 'ws://localhost:9944' \
+    --sudo \
+    --seed '//Alice' \
+    tx.registrar.reserve
+
+  npx @polkadot/api-cli@beta \
+    --ws 'ws://localhost:9944' \
+    --sudo \
+    --seed '//Alice' \
+    --params /tmp/t3rn.params \
+    tx.parasSudoWrapper.sudoScheduleParaInitialize
+
+  printf \
+    "%s {\"genesisHead\":\"%s\",\"validationCode\":\"%s\",\"parachain\":true}" \
+    4000 \
+    $(<./specs/pchain.genesis) \
+    $(<./specs/pchain.wasm) \
+    > /tmp/pchain.params
+
+  npx @polkadot/api-cli@beta \
+    --ws 'ws://localhost:9944' \
+    --sudo \
+    --seed '//Alice' \
+    tx.registrar.reserve
+
+  npx @polkadot/api-cli@beta \
+    --ws 'ws://localhost:9944' \
+    --seed '//Alice' \
+    --params /tmp/pchain.params \
+    tx.parasSudoWrapper.sudoScheduleParaInitialize
+}
+
 case ${1:-devnet} in
 devnet|dev|net)
   mkdir -p ./data/{alice,bob,charlie,dave,eve,t3rn1,t3rn2,pchain1,pchain2}
