@@ -30,7 +30,7 @@ build_relay_chain_spec() {
       --chain rococo-local \
       --disable-default-bootnode \
   > ./specs/rococo-local.json
-  sed 's/"nextFreeParaId": [[:digit:]]\+/"nextFreeParaId": 3000/g' \
+  sed 's/"nextFreeParaId": [[:digit:]]\+/"nextFreeParaId": 3333/g' \
       -i ./specs/rococo-local.json
   docker run \
       -v "$(pwd)/specs:/usr/local/etc" \
@@ -55,11 +55,11 @@ build_para_chain_specs() {
   # rm config fields that would be unprocessable in further steps
   sed 's/"forkId": null,//g' -i ./specs/t3rn.json
   # set parachain id(s)
-  sed 's/"paraId": [[:digit:]]\+/"paraId": 3000/g' \
+  sed 's/"paraId": [[:digit:]]\+/"paraId": 3333/g' \
       -i ./specs/t3rn.json
-  sed 's/"para_id": [[:digit:]]\+/"para_id": 3000/g' \
+  sed 's/"para_id": [[:digit:]]\+/"para_id": 3333/g' \
       -i ./specs/t3rn.json
-  sed 's/"parachainId": [[:digit:]]\+/"parachainId": 3000/g' \
+  sed 's/"parachainId": [[:digit:]]\+/"parachainId": 3333/g' \
       -i ./specs/t3rn.json
   # set the t3rn1 node address
   sed "s/5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY/$t3rn1_adrs/g" \
@@ -82,11 +82,11 @@ build_para_chain_specs() {
   # rm config fields that would be unprocessable in further steps
   sed 's/"forkId": null,//g' -i ./specs/pchain.json
   # set parachain id(s)
-  sed 's/"paraId": [[:digit:]]\+/"paraId": 4000/g' \
+  sed 's/"paraId": [[:digit:]]\+/"paraId": 3334/g' \
       -i ./specs/pchain.json
-  sed 's/"para_id": [[:digit:]]\+/"para_id": 4000/g' \
+  sed 's/"para_id": [[:digit:]]\+/"para_id": 3334/g' \
       -i ./specs/pchain.json
-  sed 's/"parachainId": [[:digit:]]\+/"parachainId": 4000/g' \
+  sed 's/"parachainId": [[:digit:]]\+/"parachainId": 3334/g' \
       -i ./specs/pchain.json
   # set the pchain1 node address
   sed "s/5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY/$pchain1_adrs/g" \
@@ -172,37 +172,34 @@ set_keys() {
 onboard() {
   npx --yes @polkadot/api-cli@beta \
     --ws 'ws://localhost:9944' \
-    --sudo \
     --seed '//Alice' \
     tx.registrar.reserve
 
   printf \
     "%s {\"genesisHead\":\"%s\",\"validationCode\":\"%s\",\"parachain\":true}" \
-    3000 \
+    3333 \
     $(<./specs/t3rn.genesis) \
     $(<./specs/t3rn.wasm) \
     > /tmp/t3rn.params
 
   npx @polkadot/api-cli@beta \
     --ws 'ws://localhost:9944' \
-    --sudo \
     --seed '//Alice' \
     --params /tmp/t3rn.params \
     tx.parasSudoWrapper.sudoScheduleParaInitialize
 
   npx @polkadot/api-cli@beta \
     --ws 'ws://localhost:9944' \
-    --sudo \
     --seed '//Alice' \
     tx.registrar.reserve
 
   printf \
     "%s {\"genesisHead\":\"%s\",\"validationCode\":\"%s\",\"parachain\":true}" \
-    4000 \
+    3334 \
     $(<./specs/pchain.genesis) \
     $(<./specs/pchain.wasm) \
     > /tmp/pchain.params
-  # FIXME: below fails with DispatchError BadOrigin
+
   npx @polkadot/api-cli@beta \
     --ws 'ws://localhost:9944' \
     --seed '//Alice' \

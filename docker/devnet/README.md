@@ -1,30 +1,30 @@
 # ⚡*CM* devnet WIP ⚠️
 
-##  `./run.sh devnet` | `./run.sh dev` | `./run.sh net` 
+##  `./run.sh devnet`
 
 Spins up a rococo local devnet consisting of 5 relay chain validators and 2 collators for each parachain.
 
-##  `./run.sh setkeys` | `./run.sh keys`
+The `setkeys` and `onboard` commands need to be run for a full fledged relay-parachain topology.
 
-Inserts static collator keys into the nodes' keystores. Must be run after `./run.sh devnet`.
+##  `./run.sh setkeys`
 
-After having run the `devnet` and `setkeys` subcommands above, parachains can be onboarded as illustrated in [this official tutorial](https://docs.substrate.io/tutorials/v3/cumulus/connect-parachain/#parachain-registration).
+Inserts static collator keys into the nodes' keystores.
 
-### tl;dr
+Must be run after `./run.sh devnet`.
 
-+ Connect Polkadot Apps browser UI to `ws://localhost:9944`
-+ With `Alice` [reserve a para id](https://docs.substrate.io/tutorials/v3/cumulus/connect-parachain/#reserve-a-para-id)
-+ With `Alice` submit [`parasSudoWrapper#sudoScheduleParaInitialize`](https://docs.substrate.io/tutorials/v3/cumulus/connect-parachain/#registration-transaction)
-  + See `./specs` for genesis state and wasm
-  + Parachain ids are in the table below
+## `./run.sh onboard`
 
-## `./run.sh cleanup` | `./run.sh clean`
+Initializes parachain registration with the relay chain.
+
+After the onboarding is complete the parachain will start to collate.
+
+## `./run.sh cleanup`
 
 Stops all nodes and swipes their base path data directories.
 
-## `./run.sh build` | `./run.sh make` | `./run.sh mk` 
+## `./run.sh build`
 
-Builds docker images and *regenerates* chain specs, and collator keys. Only necessary if any of the runtimes have changed.
+Builds docker images and regenerates chain specs, and collator keys. Only necessary if any of the runtimes have changed.
 
 ## Topology
 
@@ -111,7 +111,7 @@ Builds docker images and *regenerates* chain specs, and collator keys. Only nece
     <td>33333</td>
     <td>8833</td>
     <td>9933</td>
-    <td>3000</td>
+    <td>3333</td>
   </tr>
   <tr>
     <td>t3rn</td>
@@ -122,7 +122,7 @@ Builds docker images and *regenerates* chain specs, and collator keys. Only nece
     <td>33323</td>
     <td>8823</td>
     <td>9923</td>
-    <td>3000</td>
+    <td>3333</td>
   </tr>
   <tr>
     <td>pchain</td>
@@ -133,7 +133,7 @@ Builds docker images and *regenerates* chain specs, and collator keys. Only nece
     <td>44443</td>
     <td>4487</td>
     <td>4498</td>
-    <td>4000</td>
+    <td>3334</td>
   </tr>
   <tr>
     <td>pchain</td>
@@ -144,7 +144,7 @@ Builds docker images and *regenerates* chain specs, and collator keys. Only nece
     <td>44403</td>
     <td>4407</td>
     <td>4408</td>
-    <td>4000</td>
+    <td>3334</td>
   </tr>
 </table>
 
