@@ -9,7 +9,7 @@ repository  = 'https://github.com/t3rn/t3rn'
 version     = "1.0.0-alpha.0"
 
 [build-dependencies]
-substrate-wasm-builder = { git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.19" }
+substrate-wasm-builder = { git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.22" }
 
 [dependencies]
 codec       = { package = "parity-scale-codec", version = "3", default-features = false, features = [ "derive" ] }
@@ -36,9 +36,9 @@ t3rn-primitives = { default-features = false, path = "../../primitives" }
 t3rn-protocol   = { path = "../../protocol", default-features = false }
 
 # Smart contracts VMs
-# branch frontier-para uses polkadot-v0.9.19
-#pallet-evm = { git = "https://github.com/t3rn/frontier", branch = "polkadot-v0.9.19", default-features = false }
-#pallet-ethereum = { git = "https://github.com/t3rn/frontier", branch = "polkadot-v0.9.19", default-features = false }
+# branch frontier-para uses polkadot-v0.9.22
+#pallet-evm = { git = "https://github.com/t3rn/frontier", branch = "polkadot-v0.9.22", default-features = false }
+#pallet-ethereum = { git = "https://github.com/t3rn/frontier", branch = "polkadot-v0.9.22", default-features = false }
 #pallet-evm-precompile-simple = { git = "https://github.com/t3rn/frontier", branch = "polkadot-v0.9.19", default-features = false }
 
 # Substrate Dependencies

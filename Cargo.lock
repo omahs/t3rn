@@ -2796,7 +2796,7 @@ dependencies = [
  "impl-codec 0.6.0",
  "impl-rlp",
  "impl-serde",
- "scale-info 2.1.1",
+ "scale-info 1.0.0",
  "tiny-keccak 2.0.2",
 ]
 
@@ -2824,7 +2824,7 @@ dependencies = [
  "impl-rlp",
  "impl-serde",
  "primitive-types 0.11.1",
- "scale-info 2.1.1",
+ "scale-info 1.0.0",
  "uint 0.9.3",
 ]
 
@@ -9096,7 +9096,7 @@ dependencies = [
  "impl-codec 0.6.0",
  "impl-rlp",
  "impl-serde",
- "scale-info 2.1.1",
+ "scale-info 1.0.0",
  "uint 0.9.3",
 ]
 
@@ -13188,7 +13188,7 @@ dependencies = [
  "chrono",
  "lazy_static",
  "matchers",
- "parking_lot 0.9.0",
+ "parking_lot 0.10.2",
  "regex",
  "serde",
  "serde_json",

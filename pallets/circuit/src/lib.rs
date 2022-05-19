@@ -471,7 +471,6 @@ pub mod pallet {
                     Self::kill(&mut local_xtx_ctx, CircuitStatus::RevertTimedOut); // RevertKill has no impl
                     Ok(())
                 },
-                SignalKind::Continue => Ok(()),
             }
         }
     }
