@@ -15,9 +15,9 @@ pub const BLOCKS_PER_YEAR: u32 = SECONDS_PER_YEAR / SECONDS_PER_BLOCK;
     Eq, PartialEq, Clone, Copy, Encode, Decode, Default, RuntimeDebug, MaxEncodedLen, TypeInfo,
 )]
 pub struct Range<T> {
-    pub(crate) min: T,
-    pub(crate) ideal: T,
-    pub(crate) max: T,
+    pub min: T,
+    pub ideal: T,
+    pub max: T,
 }
 
 impl<T: Ord> Range<T> {
