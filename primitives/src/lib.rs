@@ -62,6 +62,7 @@ pub mod signature_caster;
 pub mod staking;
 pub mod storage;
 pub mod transfers;
+pub mod treasury;
 pub mod volatile;
 pub mod xdns;
 pub mod xtx;

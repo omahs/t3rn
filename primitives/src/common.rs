@@ -27,7 +27,7 @@ impl<T: Ord> Range<T> {
 }
 
 /// Round identifier (one-based).
-pub(crate) type RoundIndex = u32;
+pub type RoundIndex = u32;
 
 /// General round information consisting ofindex (one-based), head 
 /// (beginning block number), and term (round length in number of blocks).
