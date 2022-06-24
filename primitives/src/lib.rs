@@ -56,6 +56,7 @@ pub mod contracts_registry;
 pub mod freevm;
 pub mod gateway_inbound_protocol;
 pub mod match_format;
+pub mod monetary;
 pub mod protocol;
 pub mod side_effect;
 pub mod signature_caster;
