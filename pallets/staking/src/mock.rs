@@ -10,7 +10,7 @@ use sp_runtime::{
     Perbill, Percent,
 };
 use t3rn_primitives::{
-    common::Range,
+    common::{Range,BLOCKS_PER_HOUR},
     monetary::{MILLIT3RN, T3RN},
     treasury::Treasury as TreasuryT,
 };
@@ -126,6 +126,31 @@ impl pallet_balances::Config for Test {
     type WeightInfo = ();
 }
 
+parameter_types! {
+    pub const TreasuryAccount: u32 = 0;
+    pub const ReserveAccount: u32 = 1;
+    pub const AuctionFund: u32 = 2;
+    pub const ContractFund: u32 = 3;
+    pub const MinBlocksPerRound: u32 =  6 * BLOCKS_PER_HOUR; // TODO
+    pub const GenesisIssuance: u32 = 20_000_000; // TODO
+    pub const IdealPerpetualInflation: Perbill = Perbill::from_percent(1);
+    pub const InflationRegressionMonths: u32 = 72;
+}
+
+impl pallet_treasury::Config for Test {
+    type AuctionFund = AuctionFund;
+    type ContractFund = ContractFund;
+    type Currency = Balances;
+    type Event = Event;
+    type GenesisIssuance = GenesisIssuance;
+    type IdealPerpetualInflation = IdealPerpetualInflation;
+    type InflationRegressionMonths = InflationRegressionMonths;
+    type MinBlocksPerRound = MinBlocksPerRound;
+    type ReserveAccount = ReserveAccount;
+    type TreasuryAccount = TreasuryAccount;
+    type WeightInfo = ();
+}
+
 // LeaveCandidatesDelay=28 (=14d) assuming round_term=6h
 parameter_types! {
     pub const ActiveSetSize: Range<u32> = Range {
@@ -163,7 +188,7 @@ impl pallet_staking::Config for Test {
     type MinStake = MinStake;
     type MinStakerStake = MinStakerStake;
     type RevokeStakeDelay = RevokeStakeDelay;
-    type Treasury = TreasuryT<Self>;
+    type Treasury = Treasury;
     type WeightInfo = ();
 }
 
