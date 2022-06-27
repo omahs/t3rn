@@ -42,7 +42,7 @@ pub mod pallet {
             Bond, CancelledScheduledRequest, CandidateBondLessRequest, CapacityStatus,
             ExecutorSnapshot, ExecutorStatus, ScheduledRequest, StakerAdded, StakingAction,
         },
-        treasury::Treasury,
+        treasury::Treasury as TTreasury,
     };
 
     pub type BalanceOf<T> =
@@ -109,7 +109,7 @@ pub mod pallet {
         type RevokeStakeDelay: Get<u32>;
 
         /// Treasury round proveider.
-        type Treasury: Treasury<Self>;
+        type Treasury: TTreasury<Self>;
 
         type WeightInfo: weights::WeightInfo;
     }

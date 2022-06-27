@@ -14,7 +14,10 @@ use frame_support::{
 use scale_info::TypeInfo;
 use serde::{Deserialize, Serialize};
 use sp_runtime::{traits::CheckedAdd, PerThing, Perbill, RuntimeDebug};
-use t3rn_primitives::{common::{BLOCKS_PER_YEAR, Range}, monetary::{InflationAllocation, BeneficiaryRole}};
+use t3rn_primitives::{
+    common::{Range, BLOCKS_PER_YEAR},
+    monetary::{BeneficiaryRole, InflationAllocation},
+};
 
 // #[cfg_attr(feature = "std", derive(Serialize, Deserialize))]
 // #[derive(
@@ -86,7 +89,7 @@ impl InflationInfo {
         new_round_term: u32,
     ) -> Result<(), Error<T>> {
         ensure!(
-            new_round_term > 0 && new_round_term >= T::MinBlocksPerRound::get(),
+            new_round_term > 0 && new_round_term >= T::MinRoundTerm::get(),
             <Error<T>>::RoundTermTooShort
         );
 
@@ -154,7 +157,7 @@ pub fn rounds_per_year<T: Config>() -> Result<u32, Error<T>> {
     let round_term = <Pallet<T>>::current_round().term;
 
     ensure!(
-        round_term > 0 && round_term >= T::MinBlocksPerRound::get(),
+        round_term > 0 && round_term >= T::MinRoundTerm::get(),
         <Error<T>>::RoundTermTooShort
     );
 
