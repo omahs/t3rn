@@ -1,5 +1,5 @@
 [package]
-name = "pallet-executor-staking"
+name = "pallet-staking"
 version = "0.0.0"
 description = "Implements executor staking mechanics."
 authors = ["t3rn devs <team@t3rn.io"]

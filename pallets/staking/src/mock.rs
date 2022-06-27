@@ -1,4 +1,4 @@
-use crate::pallet as pallet_executor_staking;
+use crate::pallet as pallet_staking;
 use frame_support::{
     parameter_types,
     traits::{ConstU128, ConstU32, GenesisBuild, OnFinalize, OnInitialize},
@@ -19,7 +19,7 @@ pub(crate) fn last_event() -> Event {
     System::events().pop().expect("event expected").event
 }
 
-pub(crate) fn last_n_events(n: usize) -> Vec<pallet_executor_staking::Event<Test>> {
+pub(crate) fn last_n_events(n: usize) -> Vec<pallet_staking::Event<Test>> {
     let events = System::events();
     let len = events.len();
     if len > 0 {
@@ -27,7 +27,7 @@ pub(crate) fn last_n_events(n: usize) -> Vec<pallet_executor_staking::Event<Test
             .into_iter()
             .map(|r| r.event.clone())
             .filter_map(|e| {
-                if let Event::ExecutorStaking(inner) = e {
+                if let Event::Staking(inner) = e {
                     Some(inner)
                 } else {
                     None
@@ -72,7 +72,7 @@ frame_support::construct_runtime!(
         System: frame_system::{Pallet, Call, Config, Storage, Event<T>},
         Balances: pallet_balances::{Pallet, Call, Config<T>, Storage, Event<T>},
         Treasury: pallet_treasury::{Pallet, Call, Storage, Event<T>},
-        ExecutorStaking: pallet_executor_staking::{Pallet, Call, Storage, Event<T>},
+        Staking: pallet_staking::{Pallet, Call, Storage, Event<T>},
     }
 );
 
@@ -147,7 +147,7 @@ parameter_types! {
     pub const RevokeStakeDelay: u32 = 28;
 }
 
-impl pallet_executor_staking::Config for Test {
+impl pallet_staking::Config for Test {
     type ActiveSetSize = ActiveSetSize;
     type CandidateBondLessDelay = CandidateBondLessDelay;
     type Currency = Balances;
@@ -169,13 +169,13 @@ impl pallet_executor_staking::Config for Test {
 
 pub(crate) fn fast_forward_to(n: u64) {
     while System::block_number() < n {
-        ExecutorStaking::on_finalize(System::block_number());
+        Staking::on_finalize(System::block_number());
         Balances::on_finalize(System::block_number());
         System::on_finalize(System::block_number());
         System::set_block_number(System::block_number() + 1);
         System::on_initialize(System::block_number());
         Balances::on_initialize(System::block_number());
-        ExecutorStaking::on_initialize(System::block_number());
+        Staking::on_initialize(System::block_number());
     }
 }
 
@@ -183,11 +183,11 @@ pub(crate) fn fast_forward_to(n: u64) {
 pub fn new_test_ext() -> sp_io::TestExternalities {
     let mut storage = frame_system::GenesisConfig::default()
         .build_storage::<Test>()
-        .expect("mock pallet-executor-staking genesis storage");
+        .expect("mock pallet-staking genesis storage");
 
-    pallet_executor_staking::GenesisConfig::<Test>::default()
+    pallet_staking::GenesisConfig::<Test>::default()
         .assimilate_storage(&mut storage)
-        .expect("mock pallet-executor-staking genesis storage assimilation");
+        .expect("mock pallet-staking genesis storage assimilation");
 
     let mut ext = sp_io::TestExternalities::from(storage);
     ext.execute_with(|| System::set_block_number(1));
