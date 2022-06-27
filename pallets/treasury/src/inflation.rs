@@ -122,28 +122,6 @@ pub fn annual_to_round_inflation<T: Config>(
     Ok(round_inflation)
 }
 
-/// Computes the number of rounds per year given a fixed bock time of 12s.
-pub fn rounds_per_year<T: Config>() -> Result<u32, Error<T>> {
-    let round_term = <Pallet<T>>::current_round().term;
-
-    ensure!(
-        round_term > 0 && round_term >= T::MinBlocksPerRound::get(),
-        <Error<T>>::RoundTermTooShort
-    );
-
-    Ok(BLOCKS_PER_YEAR / round_term)
-}
-
-/// Compute round issuance range from round inflation range and current total issuance
-pub fn round_issuance_range<T: Config>(round_inflation: Range<Perbill>) -> Range<BalanceOf<T>> {
-    let circulating = T::Currency::total_issuance();
-    Range {
-        min: round_inflation.min * circulating,
-        ideal: round_inflation.ideal * circulating,
-        max: round_inflation.max * circulating,
-    }
-}
-
 /// Convert an annual inflation to a round inflation
 /// round = (1+annual)^(1/rounds_per_year) - 1
 pub fn perbill_annual_to_perbill_round(
@@ -168,6 +146,28 @@ pub fn perbill_annual_to_perbill_round(
         min: annual_to_round_inflation(annual_inflation.min),
         ideal: annual_to_round_inflation(annual_inflation.ideal),
         max: annual_to_round_inflation(annual_inflation.max),
+    }
+}
+
+/// Computes the number of rounds per year given a fixed bock time of 12s.
+pub fn rounds_per_year<T: Config>() -> Result<u32, Error<T>> {
+    let round_term = <Pallet<T>>::current_round().term;
+
+    ensure!(
+        round_term > 0 && round_term >= T::MinBlocksPerRound::get(),
+        <Error<T>>::RoundTermTooShort
+    );
+
+    Ok(BLOCKS_PER_YEAR / round_term)
+}
+
+/// Compute round issuance range from round inflation range and current total issuance
+pub fn round_issuance_range<T: Config>(round_inflation: Range<Perbill>) -> Range<BalanceOf<T>> {
+    let circulating = T::Currency::total_issuance();
+    Range {
+        min: round_inflation.min * circulating,
+        ideal: round_inflation.ideal * circulating,
+        max: round_inflation.max * circulating,
     }
 }
 
