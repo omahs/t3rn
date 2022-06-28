@@ -33,14 +33,14 @@ pub mod pallet {
     use frame_system::{ensure_root, pallet_prelude::*};
     use sp_runtime::{
         traits::{Saturating, Zero},
-        Perbill, Percent,
+        Percent,
     };
     use sp_std::collections::btree_map::BTreeMap;
     use t3rn_primitives::{
         common::{OrderedSet, Range, RoundIndex},
         staking::{
-            Bond, CancelledScheduledRequest, CandidateBondLessRequest, CapacityStatus,
-            ExecutorSnapshot, ExecutorStatus, ScheduledRequest, StakerAdded, StakingAction,
+            Bond, CancelledScheduledRequest, ExecutorSnapshot, ScheduledRequest, StakerAdded,
+            StakingAction,
         },
         treasury::Treasury as TTreasury,
     };
@@ -215,7 +215,7 @@ pub mod pallet {
     impl<T: Config> Pallet<T> {
         /// Sets the executor active set's size.
         #[pallet::weight(10_000)] //TODO
-        pub fn set_active_set_size(origin: OriginFor<T>, size: u32) -> DispatchResult {
+        pub fn set_active_set_size(origin: OriginFor<T>, _size: u32) -> DispatchResult {
             ensure_root(origin)?;
             todo!();
         }

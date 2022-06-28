@@ -1,7 +1,7 @@
 use crate::pallet as pallet_staking;
 use frame_support::{
     parameter_types,
-    traits::{ConstU128, ConstU32, GenesisBuild, OnFinalize, OnInitialize},
+    traits::{GenesisBuild, OnFinalize, OnInitialize},
 };
 use sp_core::H256;
 use sp_runtime::{
@@ -11,8 +11,7 @@ use sp_runtime::{
 };
 use t3rn_primitives::{
     common::{Range, BLOCKS_PER_HOUR},
-    monetary::{MILLIT3RN, T3RN},
-    treasury::Treasury as TTreasury,
+    monetary::T3RN,
 };
 
 pub(crate) fn last_event() -> Event {

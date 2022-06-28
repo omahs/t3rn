@@ -33,6 +33,7 @@ pub mod pallet {
     use t3rn_primitives::{
         common::{Range, RoundIndex, RoundInfo, BLOCKS_PER_YEAR},
         monetary::{BeneficiaryRole, InflationAllocation},
+        treasury::Treasury as TTreasury,
     };
 
     pub type BalanceOf<T> =
@@ -608,6 +609,12 @@ pub mod pallet {
             } else {
                 regressed_annual_inflation
             }
+        }
+    }
+
+    impl<T: Config> TTreasury<T> for Pallet<T> {
+        fn current_round() -> RoundInfo<T::BlockNumber> {
+            Self::current_round()
         }
     }
 }
