@@ -3,7 +3,7 @@
 set -x
 
 if [[ -z "$1" || -z $2 || -z $3 || -z $4 || -z $5 ]]; then
-  echo "usage: T3RN_CARGO_REGISTRY_TOKEN=deadbeef $0 'collator sudo secret' \$ws_provider \$http_provider \$tag \$when [--dryrun]"
+  echo "usage: T3RN_CARGO_REGISTRY_TOKEN=deadbeef REGISTRY_INDEX_REPO=../../registry-index.git $0 'collator sudo secret' \$ws_provider \$http_provider \$tag \$when [--dryrun]"
   # fx: T3RN_CARGO_REGISTRY_TOKEN=deadbeef $0 'collator sudo secret' ws://localhost:1933 http://localhost:1833 v0.0.0-up 33 --dryrun
   exit 1
 fi
@@ -45,14 +45,13 @@ http_provider=$3
 tag=$4
 when=$5
 used_wasm=$HOME/.runtime-upgrade.wasm
+registry_index_repo=/tmp/registry-index.git
 root_dir=$(git rev-parse --show-toplevel)
 dryrun=$(echo "$@" | grep -o dry)
 
 if [[ -z $T3RN_CARGO_REGISTRY_TOKEN ]]; then
   echo 'must set $T3RN_CARGO_REGISTRY_TOKEN' >&2
   exit 1
-else
-  echo T3RN_CARGO_REGISTRY_TOKEN > /tmp/.t3rn_cargo_registry_token
 fi
 
 if ! git tag --list | grep -Fq $tag; then
@@ -68,6 +67,10 @@ if ! cargo install --list | grep -Fq 'srtool-cli v0.8.0'; then
 fi
 
 set -Ee
+
+echo "📦 pulling cargo registry index..."
+
+git clone https://github.com/t3rn/registry-index $registry_index_repo
 
 echo "🐙 checking out $tag..."
 
@@ -113,9 +116,10 @@ fi
 
 echo "🐳 monkey patching srtool-cli..."
 
-T3RN_CARGO_REGISTRY_TOKEN_FILE=/tmp/.t3rn_cargo_registry_token \
 DOCKER_BUILDKIT=1 \
   docker build \
+  --build-arg T3RN_CARGO_REGISTRY_TOKEN=$T3RN_CARGO_REGISTRY_TOKEN \
+  --build-arg REGISTRY_INDEX_REPO=$registry_index_repo \
   -t t3rn/srtool \
   -f $root_dir/scripts/srtool.Dockerfile \
   .

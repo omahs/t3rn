@@ -4,6 +4,8 @@ FROM docker.io/library/ubuntu:22.04
 
 LABEL description="paritytech/srtool image including a t3rn registry login"
 
+ARG T3RN_CARGO_REGISTRY_TOKEN
+ARG REGISTRY_INDEX_REPO
 ENV RUSTC_VERSION="1.62.0"
 ENV DOCKER_IMAGE="t3rn/srtool"
 ENV PROFILE=release
@@ -11,8 +13,6 @@ ENV PACKAGE=polkadot-runtime
 ENV BUILDER=builder
 ARG UID=1001
 ARG GID=1001
-
-ARG T3RN_CARGO_REGISTRY_TOKEN_FILE=/tmp/.t3rn_cargo_registry_token
 ENV SRTOOL_TEMPLATES=/srtool/templates
 
 RUN groupadd -g $GID $BUILDER && \
@@ -45,6 +45,8 @@ RUN curl -L https://github.com/chevdor/subwasm/releases/download/v$SUBWASM_VERSI
 RUN git clone --depth 1 https://github.com/paritytech/srtool /tmp/srtool && \
     cp /tmp/srtool/scripts/* /srtool/ && \
     cp /tmp/srtool/templates/* /srtool/templates/ && \
+    echo 1.62.0 > /srtool/RUSTC_VERSION && \
+    echo 0.9.21 > /srtool/VERSION && \
     rm -rf /tmp/srtool
 
 USER $BUILDER
@@ -62,10 +64,10 @@ RUN echo $SHELL && \
 
 RUN git config --global --add safe.directory /build && \
     /srtool/version && \
-    echo 'PATH=".:$HOME/cargo/bin:$PATH"' >> $HOME/.bashrc
-
-RUN --mount=type=secret,id=t3rn_cargo_registry_token,target=$T3RN_CARGO_REGISTRY_TOKEN_FILE \
-    cargo login --registry=t3rn "$(</run/secrets/t3rn_cargo_registry_token)"
+    echo 'PATH=".:$HOME/cargo/bin:$PATH"' >> $HOME/.bashrc && \
+    echo -e "[registries]\nt3rn = { index = \"$REGISTRY_INDEX_REPO\" }\n[net]\ngit-fetch-with-cli = true" > $CARGO_HOME/config.toml && \
+    echo "TOKEN TOKEN TOKEN $T3RN_CARGO_REGISTRY_TOKEN" && \
+    $CARGO_HOME/bin/cargo login --registry=t3rn $T3RN_CARGO_REGISTRY_TOKEN
 
 VOLUME [ "/build", "$CARGO_HOME", "/out" ]
 WORKDIR /srtool
