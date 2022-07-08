@@ -3,17 +3,20 @@
 set -x
 
 if [[ -z "$1" || -z $2 || -z $3 || -z $4 || -z $5 ]]; then
-  echo "usage: $0 'collator sudo secret' \$ws_provider \$http_provider \$tag \$when [--dryrun]"
-  # fx: $0 'collator sudo secret' ws://localhost:1933 http://localhost:1833 v0.0.0-up 33 --dryrun
+  echo "usage: T3RN_CARGO_REGISTRY_TOKEN=deadbeef $0 'collator sudo secret' \$ws_provider \$http_provider \$tag \$when [--dryrun]"
+  # fx: T3RN_CARGO_REGISTRY_TOKEN=deadbeef $0 'collator sudo secret' ws://localhost:1933 http://localhost:1833 v0.0.0-up 33 --dryrun
   exit 1
 fi
 
 trap 'cleanup' EXIT
 
 cleanup() {
-  rm -rf node_modules
-  rm -f package.json package-lock.json
-  rm $used_wasm
+  rm -rf $root_dir/scripts/node_modules
+  rm -f \
+    $root_dir/scripts/package.json \
+    $root_dir/scripts/package-lock.json \
+    $used_wasm \
+    /tmp/.t3rn_cargo_registry_token
 }
 
 get_finalized_head(){
@@ -44,6 +47,13 @@ when=$5
 used_wasm=$HOME/.runtime-upgrade.wasm
 root_dir=$(git rev-parse --show-toplevel)
 dryrun=$(echo "$@" | grep -o dry)
+
+if [[ -z $T3RN_CARGO_REGISTRY_TOKEN ]]; then
+  echo 'must set $T3RN_CARGO_REGISTRY_TOKEN' >&2
+  exit 1
+else
+  echo T3RN_CARGO_REGISTRY_TOKEN > /tmp/.t3rn_cargo_registry_token
+fi
 
 if ! git tag --list | grep -Fq $tag; then
   echo -e "$tag is not a git tag\ntag and push the runtime for the upgrade" >&2
@@ -103,25 +113,12 @@ fi
 
 echo "🐳 monkey patching srtool-cli..."
 
-docker pull paritytech/srtool:1.57.0
-
-image_id=$( \
-  docker image ls \
-  | \
-  grep -P 'paritytech/srtool\s+1\.57\.0' \
-  | \
-  awk '{ print $3 }' \
-)
-
-srtool_latest=$( \
-  curl -sSfL \
-  https://hub.docker.com/v2/repositories/paritytech/srtool/tags/?page_size=1000 \
-  | \
-  jq -r '.results | .[] | .name' \
-  | head -n1 \
-)
-
-docker tag $image_id t3rn/srtool:$srtool_latest
+T3RN_CARGO_REGISTRY_TOKEN_FILE=/tmp/.t3rn_cargo_registry_token \
+DOCKER_BUILDKIT=1 \
+  docker build \
+  -t t3rn/srtool \
+  -f $root_dir/scripts/srtool.Dockerfile \
+  .
 
 echo "🏭 compiling runtime wasm..."
 
