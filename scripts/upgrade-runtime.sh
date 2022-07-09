@@ -2,9 +2,9 @@
 
 set -x
 
-if [[ -z "$1" || -z $2 || -z $3 || -z $4 || -z $5 ]]; then
-  echo "usage: T3RN_CARGO_REGISTRY_TOKEN=deadbeef REGISTRY_INDEX_REPO=../../registry-index.git $0 'collator sudo secret' \$ws_provider \$http_provider \$tag \$when [--dryrun]"
-  # fx: T3RN_CARGO_REGISTRY_TOKEN=deadbeef $0 'collator sudo secret' ws://localhost:1933 http://localhost:1833 v0.0.0-up 33 --dryrun
+if [[ -z $1 || -z $2 || -z "$3" || -z $4 || -z $5 || -z $6 || -z $7 ]]; then
+  echo "usage: $0 \$cargo_token \$gh_pat  'collator sudo secret' \$ws_provider \$http_provider \$tag \$when [--dryrun]"
+  # fx: $0 cargo_token gh_pat 'collator sudo secret' ws://localhost:1933 http://localhost:1833 v0.0.0-up 33 --dryrun
   exit 1
 fi
 
@@ -39,20 +39,17 @@ get_finalized_head(){
   printf $(( block_number ))
 }
 
-sudo_secret="$1"
-ws_provider=$2
-http_provider=$3
-tag=$4
-when=$5
+t3rn_cargo_registry_token=$1
+github_personal_access_token=$2
+sudo_secret="$3"
+ws_provider=$4
+http_provider="$5"
+tag=$6
+when=$7
 used_wasm=$HOME/.runtime-upgrade.wasm
 registry_index_repo=/tmp/registry-index.git
 root_dir=$(git rev-parse --show-toplevel)
 dryrun=$(echo "$@" | grep -o dry)
-
-if [[ -z $T3RN_CARGO_REGISTRY_TOKEN ]]; then
-  echo 'must set $T3RN_CARGO_REGISTRY_TOKEN' >&2
-  exit 1
-fi
 
 if ! git tag --list | grep -Fq $tag; then
   echo -e "$tag is not a git tag\ntag and push the runtime for the upgrade" >&2
@@ -118,8 +115,8 @@ echo "🐳 monkey patching srtool-cli..."
 
 DOCKER_BUILDKIT=1 \
   docker build \
-  --build-arg T3RN_CARGO_REGISTRY_TOKEN=$T3RN_CARGO_REGISTRY_TOKEN \
-  --build-arg REGISTRY_INDEX_REPO=$registry_index_repo \
+  --build-arg T3RN_CARGO_REGISTRY_TOKEN=$t3rn_cargo_registry_token \
+  --build-arg GITHUB_PERSONAL_ACCESS_TOKEN=$github_personal_access_token \
   -t t3rn/srtool \
   -f $root_dir/scripts/srtool.Dockerfile \
   .

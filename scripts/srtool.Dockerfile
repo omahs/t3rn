@@ -4,6 +4,7 @@ FROM docker.io/library/ubuntu:22.04
 
 LABEL description="paritytech/srtool image including a t3rn registry login"
 
+ARG GITHUB_PERSONAL_ACCESS_TOKEN
 ARG T3RN_CARGO_REGISTRY_TOKEN
 ARG REGISTRY_INDEX_REPO
 ENV RUSTC_VERSION="1.62.0"
@@ -65,8 +66,7 @@ RUN echo $SHELL && \
 RUN git config --global --add safe.directory /build && \
     /srtool/version && \
     echo 'PATH=".:$HOME/cargo/bin:$PATH"' >> $HOME/.bashrc && \
-    echo -e "[registries]\nt3rn = { index = \"$REGISTRY_INDEX_REPO\" }\n[net]\ngit-fetch-with-cli = true" > $CARGO_HOME/config.toml && \
-    echo "TOKEN TOKEN TOKEN $T3RN_CARGO_REGISTRY_TOKEN" && \
+    echo -e "[registries]\nt3rn={index=\"https://github.com/t3rn/registry-index.git\",token=\"$GITHUB_PERSONAL_ACCESS_TOKEN\"}" > $CARGO_HOME/config.toml && \
     $CARGO_HOME/bin/cargo login --registry=t3rn $T3RN_CARGO_REGISTRY_TOKEN
 
 VOLUME [ "/build", "$CARGO_HOME", "/out" ]
