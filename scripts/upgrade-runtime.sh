@@ -129,7 +129,7 @@ report="$( \
     --profile release \
     --runtime-dir runtime/parachain \
     --package circuit-parachain-runtime \
-    --json \
+    --app \
     $root_dir \
 )"
 
