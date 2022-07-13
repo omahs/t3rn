@@ -111,21 +111,30 @@ if [[ $new_author_version != $((old_author_version + 1)) ]]; then
   exit 1
 fi
 
-echo "🐳 monkey patching srtool-cli..."
+# echo "🐳 monkey patching srtool-cli..."
 
-DOCKER_BUILDKIT=1 \
-  docker build \
-  --build-arg T3RN_CARGO_REGISTRY_TOKEN=$t3rn_cargo_registry_token \
-  --build-arg GITHUB_PERSONAL_ACCESS_TOKEN=$github_personal_access_token \
-  -t t3rn/srtool \
-  -f $root_dir/scripts/srtool.Dockerfile \
-  .
+# DOCKER_BUILDKIT=1 \
+#   docker build \
+#   --build-arg T3RN_CARGO_REGISTRY_TOKEN=$t3rn_cargo_registry_token \
+#   --build-arg GITHUB_PERSONAL_ACCESS_TOKEN=$github_personal_access_token \
+#   -t t3rn/srtool \
+#   -f $root_dir/scripts/srtool.Dockerfile \
+#   .
 
 echo "🏭 compiling runtime wasm..."
 
+# report="$( \
+#   srtool build \
+#     --image t3rn/srtool \
+#     --profile release \
+#     --runtime-dir runtime/parachain \
+#     --package circuit-parachain-runtime \
+#     --app \
+#     $root_dir \
+# )"
+
 report="$( \
   srtool build \
-    --image t3rn/srtool \
     --profile release \
     --runtime-dir runtime/parachain \
     --package circuit-parachain-runtime \
