@@ -2,7 +2,7 @@
 
 set -xEeo pipefail
 
-PDOT_BRANCH=${PDOT_BRANCH:-release-v0.9.19}
+PDOT_BRANCH=${PDOT_BRANCH:-release-v0.9.27}
 
 dir=$(git rev-parse --show-toplevel)/devnet
 

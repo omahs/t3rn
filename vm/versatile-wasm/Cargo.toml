@@ -25,16 +25,16 @@ t3rn-primitives  = { default-features = false, path = "../../primitives" }
 wasmi-validation = { version = "0.3.0", default-features = false }
 wat              = { version = "1.0.37", optional = true, default-features = false }
 
-frame-support = { default-features = false, git = "https://github.com/paritytech/substrate", branch = 'polkadot-v0.9.8' }
-sp-core       = { default-features = false, git = "https://github.com/paritytech/substrate", branch = 'polkadot-v0.9.8' }
-sp-io         = { default-features = false, git = "https://github.com/paritytech/substrate", branch = 'polkadot-v0.9.8' }
-sp-runtime    = { default-features = false, git = "https://github.com/paritytech/substrate", branch = 'polkadot-v0.9.8' }
-sp-sandbox    = { default-features = false, git = "https://github.com/paritytech/substrate", branch = 'polkadot-v0.9.8' }
-sp-std        = { default-features = false, git = "https://github.com/paritytech/substrate", branch = 'polkadot-v0.9.8' }
+frame-support = { default-features = false, git = "https://github.com/paritytech/substrate", branch = 'polkadot-v0.9.27' }
+sp-core       = { default-features = false, git = "https://github.com/paritytech/substrate", branch = 'polkadot-v0.9.27' }
+sp-io         = { default-features = false, git = "https://github.com/paritytech/substrate", branch = 'polkadot-v0.9.27' }
+sp-runtime    = { default-features = false, git = "https://github.com/paritytech/substrate", branch = 'polkadot-v0.9.27' }
+sp-sandbox    = { default-features = false, git = "https://github.com/paritytech/substrate", branch = 'polkadot-v0.9.27' }
+sp-std        = { default-features = false, git = "https://github.com/paritytech/substrate", branch = 'polkadot-v0.9.27' }
 
-sudo                = { default-features = false, package = 'pallet-sudo', git = "https://github.com/paritytech/substrate", branch = 'polkadot-v0.9.8' }
-system              = { default-features = false, package = 'frame-system', git = "https://github.com/paritytech/substrate", branch = 'polkadot-v0.9.8' }
-transaction-payment = { package = "pallet-transaction-payment", git = "https://github.com/paritytech/substrate", branch = 'polkadot-v0.9.8', default-features = false }
+sudo                = { default-features = false, package = 'pallet-sudo', git = "https://github.com/paritytech/substrate", branch = 'polkadot-v0.9.27' }
+system              = { default-features = false, package = 'frame-system', git = "https://github.com/paritytech/substrate", branch = 'polkadot-v0.9.27' }
+transaction-payment = { package = "pallet-transaction-payment", git = "https://github.com/paritytech/substrate", branch = 'polkadot-v0.9.27', default-features = false }
 
 [features]
 default = [ "std" ]
