@@ -587,7 +587,7 @@ impl<T: Config> CircuitPortal<T> for Pallet<T> {
 }
 impl<T: Config> Pallet<T> {
     pub fn account_id() -> <T as frame_system::Config>::AccountId {
-        T::PalletId::get().into_account()
+        T::PalletId::get().into_account_truncating()
     }
 }
 
@@ -603,7 +603,7 @@ impl<
     type Success = <T as frame_system::Config>::AccountId;
 
     fn try_origin(o: O) -> Result<Self::Success, O> {
-        let loan_id = T::PalletId::get().into_account();
+        let loan_id = T::PalletId::get().into_account_truncating();
         o.into().and_then(|o| match o {
             RawOrigin::Signed(who) if who == loan_id => Ok(loan_id),
             r => Err(O::from(r)),

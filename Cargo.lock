@@ -2980,22 +2980,6 @@ dependencies = [
 
 [[package]]
 name = "finality-grandpa"
-version = "0.15.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d9def033d8505edf199f6a5d07aa7e6d2d6185b164293b77f0efd108f4f3e11d"
-dependencies = [
- "either",
- "futures 0.3.24",
- "futures-timer",
- "log",
- "num-traits",
- "parity-scale-codec",
- "parking_lot 0.11.2",
- "scale-info",
-]
-
-[[package]]
-name = "finality-grandpa"
 version = "0.16.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b22349c6a11563a202d95772a68e0fcf56119e74ea8a2a19cf2301460fcd0df5"
@@ -7197,7 +7181,7 @@ dependencies = [
 name = "pallet-multi-finality-verifier"
 version = "1.0.0-alpha.0"
 dependencies = [
- "finality-grandpa 0.15.0",
+ "finality-grandpa",
  "frame-support",
  "frame-system",
  "log",
@@ -10702,7 +10686,7 @@ dependencies = [
  "ahash",
  "async-trait",
  "dyn-clone",
- "finality-grandpa 0.16.0",
+ "finality-grandpa",
  "fork-tree",
  "futures 0.3.24",
  "futures-timer",
@@ -10740,7 +10724,7 @@ name = "sc-finality-grandpa-rpc"
 version = "0.10.0-dev"
 source = "git+https://github.com/paritytech/substrate.git?branch=polkadot-v0.9.27#8eff668a42325aeb4433eace1604f4d286a6ec05"
 dependencies = [
- "finality-grandpa 0.16.0",
+ "finality-grandpa",
  "futures 0.3.24",
  "jsonrpsee 0.14.0",
  "log",
@@ -12202,7 +12186,7 @@ name = "sp-finality-grandpa"
 version = "4.0.0-dev"
 source = "git+https://github.com/paritytech/substrate.git?branch=polkadot-v0.9.27#8eff668a42325aeb4433eace1604f4d286a6ec05"
 dependencies = [
- "finality-grandpa 0.16.0",
+ "finality-grandpa",
  "log",
  "parity-scale-codec",
  "scale-info",
@@ -12975,7 +12959,7 @@ name = "t3rn-primitives"
 version = "1.0.0-alpha.0"
 dependencies = [
  "ed25519-dalek",
- "finality-grandpa 0.15.0",
+ "finality-grandpa",
  "frame-support",
  "frame-system",
  "hash-db",

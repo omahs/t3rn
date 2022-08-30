@@ -1974,7 +1974,7 @@ impl<T: Config> Pallet<T> {
 
     /// The account ID of the Circuit Vault.
     pub fn account_id() -> T::AccountId {
-        <T as Config>::PalletId::get().into_account()
+        <T as Config>::PalletId::get().into_account_truncating() // TODO[ALEX]: figure out where they deprecated this and what to do instead
     }
 
     // TODO: we also want to save some space for timeouts, split the weight distribution 50-50
