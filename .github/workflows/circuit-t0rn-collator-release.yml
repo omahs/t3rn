@@ -86,9 +86,9 @@ jobs:
         with:
           context: .
           push: true
+          registry: ghcr.io
           tags:
-            t3rn/circuit-collator:${{ env.PUSHED_TAG }}
-            ghcr.io/t3rn/circuit-collator:latest
+            t3rn/circuit-collator:latest
           platforms: linux/amd64
           file: collator.Dockerfile
           cache-from: type=local,src=/tmp/.buildx-cache
