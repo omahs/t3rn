@@ -3,7 +3,7 @@ import { ApiPromise, Keyring } from'@polkadot/api';
 import { CircuitRelayer } from "./circuitRelayer";
 import { register } from "./commands/register/register";
 import { setOperational } from "./commands/operational";
-// import {onExtrinsicTrigger} from "./commands/onExtrinsicTrigger";
+import {onExtrinsicTrigger} from "./commands/onExtrinsicTrigger";
 // import * as fs from "fs";
 import {submitHeader} from "./commands/submit_header/submit_header";
 import { Sdk, encodings, converters } from "@t3rn/sdk/dist/src";
@@ -137,32 +137,32 @@ class CircuitCLI {
             this.error();
         }
     }
-    //
-    // async transfer(data: any, sequential: boolean) {
-    //     const gatewayData = config.gateways.find(elem => elem.id === data.target)
-    //
-    //     if(gatewayData) {
-    //         if(data.receiver === '') data.receiver = gatewayData.transferData.receiver;
-    //         const transactionArgs: any = onExtrinsicTrigger(this.circuit, [data], sequential, this.signer.address)
-    //         // @ts-ignore
-    //         let submissionNumber: number = await this.circuitRelayer.onExtrinsicTrigger(transactionArgs)
-    //             .catch(err => {
-    //                 console.log("Transfer Failed! Error:", err);
-    //                 this.error()
-    //             })
-    //
-    //         if (data.exportArgs) {
-    //             const fileName = `./exports/` + data.exportName + '.json';
-    //             this.exportData([transactionArgs], fileName, "transfer", submissionNumber)
-    //         } else {
-    //             this.close()
-    //         }
-    //
-    //     } else {
-    //         console.log(`Config or argument for ${process.argv[3]} not found!`)
-    //         this.error();
-    //     }
-    // }
+
+    async transfer(data: any, sequential: boolean) {
+        const gatewayData = config.gateways.find(elem => elem.id === data.target)
+
+        if(gatewayData) {
+            if(data.to === '') data.to = gatewayData.transferData.receiver;
+            const transactionArgs: any = onExtrinsicTrigger(this.circuit, [data], sequential, this.signer.address, this.sdk)
+            // @ts-ignore
+            let submissionNumber: number = await this.circuitRelayer.onExtrinsicTrigger(transactionArgs)
+                .catch(err => {
+                    console.log("Transfer Failed! Error:", err);
+                    this.error()
+                })
+
+            if (data.exportArgs) {
+                const fileName = `./exports/` + data.exportName + '.json';
+                this.exportData([transactionArgs], fileName, "transfer", submissionNumber)
+            } else {
+                this.close()
+            }
+
+        } else {
+            console.log(`Config or argument for ${process.argv[3]} not found!`)
+            this.error();
+        }
+    }
     //
     // async submitSideEffects(path: string, exportArgs: boolean, exportName: string) {
     //     if (!fs.existsSync(path)) {
@@ -196,26 +196,26 @@ class CircuitCLI {
     //     }
     // }
     //
-    // exportData(data: any, fileName: string, transactionType: string, submissionHeight: number) {
-    //     let deepCopy;
-    //     // since its pass-by-reference
-    //     if(Array.isArray(data)) {
-    //         deepCopy = [...data];
-    //     } else {
-    //         deepCopy = {...data};
-    //     }
-    //
-    //     // let encoded = encodings.encoder.encodeExport(deepCopy, transactionType, submissionHeight);
-    //     // fs.writeFile(fileName, JSON.stringify(encoded, null, 4), (err) => {
-    //     //     if(err) {
-    //     //       console.log(err);
-    //     //       this.error();
-    //     //     } else {
-    //     //       console.log("JSON saved to " + fileName);
-    //     //       this.close();
-    //     //     }
-    //     // });
-    // }
+    exportData(data: any, fileName: string, transactionType: string, submissionHeight: number) {
+        let deepCopy;
+        // since its pass-by-reference
+        if(Array.isArray(data)) {
+            deepCopy = [...data];
+        } else {
+            deepCopy = {...data};
+        }
+
+        // let encoded = encodings.encoder.encodeExport(deepCopy, transactionType, submissionHeight);
+        // fs.writeFile(fileName, JSON.stringify(encoded, null, 4), (err) => {
+        //     if(err) {
+        //       console.log(err);
+        //       this.error();
+        //     } else {
+        //       console.log("JSON saved to " + fileName);
+        //       this.close();
+        //     }
+        // });
+    }
 }
 
 program.command('register')
@@ -253,24 +253,23 @@ program.command('submit-headers')
           await cli.setup()
           cli.submitHeaders(id, options.export, options.output)
       });
-//
-// program.command('transfer')
-//       .description('Triggers a transfer SideEffect, sending the targets nativ asset')
-//       .argument('gateway_id <string>', 'gateway_id as specified in setup.ts')
-//       .option('-a --amount <float>', 'transfer amount', '1')
-//       .option('-r --receiver <string>', 'receiver address', '')
-//       .option('-b --bond <float>', 'The bond required for execution', '0')
-//       .option('--reward <float>', 'The reward payed out (not sure for what)', '0')
-//       .option('--executioner <string>', 'enforce executioner address')
-//       .option('-e, --export', 'export the transaction arguments as JSON', false)
-//       .option('-o, --output <string>', 'specify the filename of the export', "export")
-//       .action(async (id, options) => {
-//           let cli = new CircuitCLI();
-//           await cli.setup()
-//           options.target = id
-//           options.type = "tran"
-//           cli.transfer(options, false)
-//       });
+
+program.command('transfer')
+      .description('Triggers a transfer SideEffect, sending the targets nativ asset')
+      .argument('gateway_id <string>', 'gateway_id as specified in setup.ts')
+      .option('-t --to <string>', 'receiver address', '')
+      .option('-a --amount <flaot>', 'The Amount to send in target native asset', '0.01')
+      .option('-r --reward <float>', 'Reward paid for execution', '1')
+      .option('-i --insurance <float>', 'Insurance required for execution', '1')
+      .option('-e, --export', 'export the transaction arguments as JSON', false)
+      .option('-o, --output <string>', 'specify the filename of the export', "export")
+      .action(async (id, options) => {
+          let cli = new CircuitCLI();
+          await cli.setup()
+          options.target = id
+          options.type = "tran"
+          cli.transfer(options, false)
+      });
 //
 // program.command('submit-side-effects')
 //       .description('Submits SideEffects based on input file')

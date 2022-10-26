@@ -1,5 +1,5 @@
 // @ts-ignore
-import {T3rnPrimitivesXdnsXdnsRecord, T3rnTypesSideEffect} from "@polkadot/types/lookup"
+import {T3rnPrimitivesXdnsXdnsRecord, T3rnTypesSideEffect, u128} from "@polkadot/types/lookup"
 import * as BN from 'bn.js'
 
 export const createSfx = (
@@ -21,7 +21,7 @@ export const createSfx = (
 		encodedAction: args.encodedAction,
 		encodedArgs: args.encodedArgs,
 		signature: args.signature,
-		requesterNonce: args.nonce,
+		nonce: args.nonce,
 		enforceExecutioner: args.enforceExecutioner,
 	}
 	return sfx

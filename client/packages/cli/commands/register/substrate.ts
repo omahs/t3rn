@@ -85,12 +85,12 @@ const createGatewayGenesis = async (circuit: ApiPromise, target: ApiPromise): Pr
 
 const createAbiConfig = (circuiApi: ApiPromise, gatewayConfig: any): Codec => {
     const config: GatewayABIConfig = {
-        blockNumberTypeSize: gatewayConfig.blockNumberTypeSize,
-        hashSize: gatewayConfig.hashSize,
+        block_number_type_size: gatewayConfig.blockNumberTypeSize,
+        hash_size: gatewayConfig.hashSize,
         hasher: gatewayConfig.hasher,
         crypto: gatewayConfig.crypto,
-        addressLength: gatewayConfig.addressLength,
-        valueTypeSize: gatewayConfig.valueTypeSize,
+        address_length: gatewayConfig.addressLength,
+        value_type_size: gatewayConfig.valueTypeSize,
         decimals: gatewayConfig.decimals,
         structs: gatewayConfig.structs
     }
