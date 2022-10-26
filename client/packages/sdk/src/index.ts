@@ -4,10 +4,15 @@ import { ApiPromise, WsProvider } from "@polkadot/api"
 import types from './config/types.json';
 import rpc from './config/rpc.json';
 import {Gateway, initGateways} from "./gateways";
+import * as BN from 'bn.js'
 // @ts-ignore
 import {T3rnTypesSideEffect} from "@polkadot/types/lookup";
 import * as encodings from './encodings'
 import * as converters from './converters'
+import {AmountConverter} from "./converters/amounts";
+
+const DECIMALS = 12;
+const VALUE_TYPE_SIZE = 16;
 
 export class Sdk {
 
@@ -16,6 +21,7 @@ export class Sdk {
 	gateways: {
 		[id: string]: Gateway
 	}
+	amountConverter: AmountConverter;
 
 	constructor(rpcUrl: string) {
 		this.rpcUrl = rpcUrl;
@@ -31,6 +37,14 @@ export class Sdk {
 		})
 		this.gateways = await initGateways(this.client)
 		return this.client
+	}
+
+	//ToDo this should be moved to a more sensible namespace
+	floatToBn(value: number): BN {
+		return new AmountConverter({
+			decimals: DECIMALS,
+			valueTypeSize: VALUE_TYPE_SIZE}
+		).floatToBn(value)
 	}
 }
 

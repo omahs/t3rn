@@ -3,7 +3,7 @@ import * as BN from 'bn.js'
 
 // A amount conversion class that can be used to convert amounts to the correct format based on the gateway
 export class AmountConverter {
-	value: BN | number;
+	value: BN;
 	decimals: number;
 	valueTypeSize: number;
 
@@ -33,11 +33,14 @@ export class AmountConverter {
 				} else {
 					this.value = new BN.BN(args.value, 10)
 				}
-			} else {
-				if(isNumber(args.value) && Math.floor(args.value as number) !== args.value) {
+			} else if(isNumber(args.value)){
+				if(Math.floor(args.value as number) !== args.value) {
 					throw new Error("AmountConverter: Float values not supported! Please convert to Integer!")
+				} else {
+					this.value = new BN.BN(args.value, 10);
 				}
-				this.value = args.value as BN | number;
+			} else {
+				this.value = args.value as BN;
 			}
 		}
 	}
@@ -52,7 +55,7 @@ export class AmountConverter {
 		return this.value as BN
 	}
 
-	// convert a float parameter into BN
+	// convert a float parameter into BN, using the set decimals
 	floatToBn(value: number): BN {
 		return floatToBn(value, this.decimals)
 	}

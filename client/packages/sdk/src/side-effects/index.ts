@@ -16,7 +16,7 @@ export const createSfx = (
 ): T3rnTypesSideEffect => {
 	const sfx: T3rnTypesSideEffect = {
 		target: args.target,
-		maxFee: args.maxReward,
+		maxReward: args.maxReward,
 		insurance: args.insurance,
 		encodedAction: args.encodedAction,
 		encodedArgs: args.encodedArgs,
