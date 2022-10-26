@@ -14,6 +14,7 @@ declare module "@polkadot/api-base/types/errors" {
   interface AugmentedErrors<ApiType extends ApiTypes> {
     accountManager: {
       ChargeAlreadyRegistered: AugmentedError<ApiType>;
+      ChargeOrSettlementActualFeesOutgrowReserved: AugmentedError<ApiType>;
       ChargeOrSettlementCalculationOverflow: AugmentedError<ApiType>;
       DecodingExecutionIDFailed: AugmentedError<ApiType>;
       ExecutionAlreadyRegistered: AugmentedError<ApiType>;

@@ -397,12 +397,12 @@ export default {
    */
   T3rnTypesSideEffect: {
     target: "[u8;4]",
-    maxFee: "u128",
+    maxReward: "u128",
     insurance: "u128",
     encodedAction: "Bytes",
     encodedArgs: "Vec<Bytes>",
     signature: "Bytes",
-    requesterNonce: "u32",
+    nonce: "u32",
     enforceExecutor: "Option<AccountId32>",
   },
   /**
@@ -2466,6 +2466,7 @@ export default {
       "NoChargeOfGivenIdRegistered",
       "ChargeAlreadyRegistered",
       "ChargeOrSettlementCalculationOverflow",
+      "ChargeOrSettlementActualFeesOutgrowReserved",
       "DecodingExecutionIDFailed",
     ],
   },

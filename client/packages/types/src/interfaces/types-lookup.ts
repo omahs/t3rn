@@ -655,12 +655,12 @@ declare module "@polkadot/types/lookup" {
   /** @name T3rnTypesSideEffect (57) */
   interface T3rnTypesSideEffect extends Struct {
     readonly target: U8aFixed;
-    readonly maxFee: u128;
+    readonly maxReward: u128;
     readonly insurance: u128;
     readonly encodedAction: Bytes;
     readonly encodedArgs: Vec<Bytes>;
     readonly signature: Bytes;
-    readonly requesterNonce: u32;
+    readonly nonce: u32;
     readonly enforceExecutor: Option<AccountId32>;
   }
 
@@ -3499,6 +3499,7 @@ declare module "@polkadot/types/lookup" {
     readonly isNoChargeOfGivenIdRegistered: boolean;
     readonly isChargeAlreadyRegistered: boolean;
     readonly isChargeOrSettlementCalculationOverflow: boolean;
+    readonly isChargeOrSettlementActualFeesOutgrowReserved: boolean;
     readonly isDecodingExecutionIDFailed: boolean;
     readonly type:
       | "PendingChargeNotFoundAtCommit"
@@ -3509,6 +3510,7 @@ declare module "@polkadot/types/lookup" {
       | "NoChargeOfGivenIdRegistered"
       | "ChargeAlreadyRegistered"
       | "ChargeOrSettlementCalculationOverflow"
+      | "ChargeOrSettlementActualFeesOutgrowReserved"
       | "DecodingExecutionIDFailed";
   }
 

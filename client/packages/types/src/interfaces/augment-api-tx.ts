@@ -1169,12 +1169,12 @@ declare module "@polkadot/api-base/types/submittable" {
             | T3rnTypesSideEffect
             | {
                 target?: any;
-                maxFee?: any;
+                maxReward?: any;
                 insurance?: any;
                 encodedAction?: any;
                 encodedArgs?: any;
                 signature?: any;
-                requesterNonce?: any;
+                nonce?: any;
                 enforceExecutor?: any;
               }
             | string
@@ -1214,12 +1214,12 @@ declare module "@polkadot/api-base/types/submittable" {
             | T3rnTypesSideEffect
             | {
                 target?: any;
-                maxFee?: any;
+                maxReward?: any;
                 insurance?: any;
                 encodedAction?: any;
                 encodedArgs?: any;
                 signature?: any;
-                requesterNonce?: any;
+                nonce?: any;
                 enforceExecutor?: any;
               }
             | string
@@ -1237,12 +1237,12 @@ declare module "@polkadot/api-base/types/submittable" {
                 | T3rnTypesSideEffect
                 | {
                     target?: any;
-                    maxFee?: any;
+                    maxReward?: any;
                     insurance?: any;
                     encodedAction?: any;
                     encodedArgs?: any;
                     signature?: any;
-                    requesterNonce?: any;
+                    nonce?: any;
                     enforceExecutor?: any;
                   }
                 | string
