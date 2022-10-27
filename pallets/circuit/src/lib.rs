@@ -1231,7 +1231,7 @@ impl<T: Config> Pallet<T> {
                                         T::BlockNumber,
                                         EscrowedBalanceOf<T, <T as Config>::Escrowed>,
                                     >::generate_step_id::<T>(
-                                        side_effect_hash, cnt
+                                        local_ctx.xtx_id, cnt
                                     ),
                                 )
                             })
