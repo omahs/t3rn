@@ -1,4 +1,3 @@
-// import { ApiPromise } from "@polkadot/api";
 // @ts-ignore
 import {T3rnPrimitivesXdnsXdnsRecord, T3rnTypesSideEffect} from "@polkadot/types/lookup"
 import {AmountConverter, optionalInsurance} from "../converters/amounts";
@@ -22,6 +21,7 @@ export class Gateway {
 	addressFormat: number;
 	valueTypeSize: number;
 	allowedSideEffects: string[];
+	createSfx: {} = {};
 
 	constructor(xdnsEntry: T3rnPrimitivesXdnsXdnsRecord) {
 		this.id = xdnsEntry.toHuman().gateway_id;
@@ -38,9 +38,10 @@ export class Gateway {
 		// @ts-ignore
 		this.valueTypeSize = parseInt(xdnsEntry.toHuman().gateway_abi.value_type_size);
 		this.allowedSideEffects = xdnsEntry.toHuman().allowed_side_effects
+		this.setSfxBindings();
 	}
 
-	createTransferSfx(
+	createTransferSfx = (
 		args: {
 			from: string,
 			to: string,
@@ -51,8 +52,7 @@ export class Gateway {
 			signature?: string,
 			enforceExecutioner?: string
 		}
-	): T3rnTypesSideEffect {
-		if (!this.allowedSideEffects.includes("tran")) throw new Error(`Transfer Sfx not supported for ${this.id}`)
+	): T3rnTypesSideEffect => {
 		const encodedArgs: string[] = this.encodeTransferArgs(args.from, args.to, args.value, args.insurance, args.maxReward)
 
 		const maxReward = new AmountConverter({value: args.maxReward}).toBn()
@@ -118,6 +118,16 @@ export class Gateway {
 			return GatewayType.Substrate
 		} else if(vendor === "Ethereum") {
 			return GatewayType.Evm
+		}
+	}
+
+	setSfxBindings() {
+		for(let i = 0; i < this.allowedSideEffects.length; i++) {
+			switch(this.allowedSideEffects[i]) {
+				case "tran":
+					this.createSfx["tran"] = this.createTransferSfx
+
+			}
 		}
 	}
 
