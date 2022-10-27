@@ -4,9 +4,9 @@ import { CircuitRelayer } from "./circuitRelayer";
 import { register } from "./commands/register/register";
 import { setOperational } from "./commands/operational";
 import {onExtrinsicTrigger} from "./commands/onExtrinsicTrigger";
-// import * as fs from "fs";
+import * as fs from "fs";
 import {submitHeader} from "./commands/submit_header/submit_header";
-import { Sdk, encodings, converters } from "@t3rn/sdk/dist/src";
+import { Sdk, converters } from "@t3rn/sdk/dist/src";
 
 import { Command } from 'commander';
 const program = new Command();
@@ -163,39 +163,39 @@ class CircuitCLI {
             this.error();
         }
     }
-    //
-    // async submitSideEffects(path: string, exportArgs: boolean, exportName: string) {
-    //     if (!fs.existsSync(path)) {
-    //          console.log("File doesn't exist!")
-    //          this.error()
-    //      }
-    //
-    //     const data = (await import('./' + path)).default;
-    //
-    //     // Check we have an config for each SideEffect
-    //     data.sideEffects.forEach(effect => {
-    //         if (!config.gateways.find(entry => entry.id === effect.target)) {
-    //             console.log(`Gateway for SideEffect ${effect.type} not found!`)
-    //             this.error()
-    //         }
-    //     })
-    //
-    //     const transactionArgs: any = onExtrinsicTrigger(this.circuit, data.sideEffects, data.sequential, this.signer.address)
-    //     // @ts-ignore
-    //     let submissionNumber: number = await this.circuitRelayer.onExtrinsicTrigger(transactionArgs)
-    //         .catch(err => {
-    //             console.log("Transfer Failed! Error:", err);
-    //             this.error()
-    //         })
-    //
-    //     if (exportArgs) {
-    //         const fileName = `./exports/` + exportName + '.json';
-    //         this.exportData([transactionArgs], fileName, "transfer", submissionNumber)
-    //     } else {
-    //         this.close()
-    //     }
-    // }
-    //
+
+    async submitSideEffects(path: string, exportArgs: boolean, exportName: string) {
+        if (!fs.existsSync(path)) {
+             console.log("File doesn't exist!")
+             this.error()
+         }
+
+        const data = (await import('./' + path)).default;
+
+        // Check we have an config for each SideEffect
+        data.sideEffects.forEach(effect => {
+            if (!config.gateways.find(entry => entry.id === effect.target)) {
+                console.log(`Gateway for SideEffect ${effect.type} not found!`)
+                this.error()
+            }
+        })
+
+        const transactionArgs: any = onExtrinsicTrigger(this.circuit, data.sideEffects, data.sequential, this.signer.address, this.sdk)
+        // @ts-ignore
+        let submissionNumber: number = await this.circuitRelayer.onExtrinsicTrigger(transactionArgs)
+            .catch(err => {
+                console.log("Transfer Failed! Error:", err);
+                this.error()
+            })
+
+        if (exportArgs) {
+            const fileName = `./exports/` + exportName + '.json';
+            this.exportData([transactionArgs], fileName, "transfer", submissionNumber)
+        } else {
+            this.close()
+        }
+    }
+
     exportData(data: any, fileName: string, transactionType: string, submissionHeight: number) {
         let deepCopy;
         // since its pass-by-reference
@@ -205,16 +205,16 @@ class CircuitCLI {
             deepCopy = {...data};
         }
 
-        // let encoded = encodings.encoder.encodeExport(deepCopy, transactionType, submissionHeight);
-        // fs.writeFile(fileName, JSON.stringify(encoded, null, 4), (err) => {
-        //     if(err) {
-        //       console.log(err);
-        //       this.error();
-        //     } else {
-        //       console.log("JSON saved to " + fileName);
-        //       this.close();
-        //     }
-        // });
+        let encoded = converters.utils.encodeExport(deepCopy, transactionType, submissionHeight);
+        fs.writeFile(fileName, JSON.stringify(encoded, null, 4), (err) => {
+            if(err) {
+              console.log(err);
+              this.error();
+            } else {
+              console.log("JSON saved to " + fileName);
+              this.close();
+            }
+        });
     }
 }
 
@@ -270,17 +270,17 @@ program.command('transfer')
           options.type = "tran"
           cli.transfer(options, false)
       });
-//
-// program.command('submit-side-effects')
-//       .description('Submits SideEffects based on input file')
-//       .argument('path <string>', 'path to file')
-//       .option('-e, --export', 'export the transaction arguments as JSON', false)
-//       .option('-o, --output <string>', 'specify the filename of the export', "export")
-//       .action(async (path, options) => {
-//           let cli = new CircuitCLI();
-//           await cli.setup()
-//           console.log(options.export)
-//           cli.submitSideEffects(path, options.export, options.output)
-//       });
+
+program.command('submit-side-effects')
+      .description('Submits SideEffects based on input file')
+      .argument('path <string>', 'path to file')
+      .option('-e, --export', 'export the transaction arguments as JSON', false)
+      .option('-o, --output <string>', 'specify the filename of the export', "export")
+      .action(async (path, options) => {
+          let cli = new CircuitCLI();
+          await cli.setup()
+          console.log(options.export)
+          cli.submitSideEffects(path, options.export, options.output)
+      });
 
 program.parse();

@@ -8,13 +8,13 @@ export const onExtrinsicTrigger = (circuitApi: ApiPromise, sideEffects: any[], s
     return {
         sideEffects: circuitApi.createType("Vec<T3rnTypesSideEffect>",
             sideEffects.map(data => {
-                const obj: T3rnTypesSideEffect = sdk.gateways[data.target].createTransferSfx({
+                const obj: T3rnTypesSideEffect = sdk.gateways[data.target].createSfx[data.type]({
                     from: sender.toString(),
                     to: data.to,
                     value: sdk.gateways[data.target].floatToBn(data.amount),
-                    maxReward: sdk.floatToBn(data.reward), // we need t3rn float encoding here
-                    insurance: sdk.floatToBn(data.insurance), // and here
-                    nonce: 1,
+                    maxReward: sdk.floatToBn(data.reward), // CLI accepts floats, so we need to convert
+                    insurance: sdk.floatToBn(data.insurance), // same here
+                    nonce: 0,
                 })
                 return obj
             })
