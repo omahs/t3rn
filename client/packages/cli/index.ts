@@ -9,6 +9,7 @@ import {submitHeader} from "./commands/submit_header/submit_header";
 import { Sdk, converters } from "@t3rn/sdk/dist/src";
 
 import { Command } from 'commander';
+import {bid} from "./commands/bid";
 const program = new Command();
 
 program
@@ -196,6 +197,24 @@ class CircuitCLI {
         }
     }
 
+    async bid(data: any, exportArgs: boolean, exportName: string) {
+        const transactionArgs: any = bid(this.circuit, data, this.sdk);
+
+        // @ts-ignore
+        let submissionNumber: number = await this.circuitRelayer.bidExecution(transactionArgs)
+            .catch(err => {
+                console.log("Transfer Failed! Error:", err);
+                this.error()
+            })
+
+        if (exportArgs) {
+            const fileName = `./exports/` + exportName + '.json';
+            this.exportData([transactionArgs], fileName, "transfer", submissionNumber)
+        } else {
+            this.close()
+        }
+    }
+
     exportData(data: any, fileName: string, transactionType: string, submissionHeight: number) {
         let deepCopy;
         // since its pass-by-reference
@@ -279,8 +298,20 @@ program.command('submit-side-effects')
       .action(async (path, options) => {
           let cli = new CircuitCLI();
           await cli.setup()
-          console.log(options.export)
           cli.submitSideEffects(path, options.export, options.output)
+      });
+
+program.command('bid')
+      .description('Bid on an execution as an Executor')
+      .argument('xtxId <string>', 'xtxId of the execution')
+      .argument('sfxId <string>', 'sfxId of the side effect to bid on')
+      .argument('amount <float>', 'bid amount')
+      .option('-e, --export', 'export the transaction arguments as JSON', false)
+      .option('-o, --output <string>', 'specify the filename of the export', "export")
+      .action(async (xtxId, sfxId, amount, options) => {
+          let cli = new CircuitCLI();
+          await cli.setup()
+          cli.bid({xtxId, sfxId, amount}, options.export, options.output)
       });
 
 program.parse();

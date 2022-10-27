@@ -15,7 +15,9 @@ export class CircuitRelayer {
         return new Promise((res, rej) => {
             return this.circuit.tx.sudo.sudo(transaction).signAndSend(signer, async result => {
                 if (result.toHuman().dispatchError !== undefined) { // The pallet doesn't return a proper error
-                    rej(result.toHuman().dispatchError)
+                    rej(this.circuit.registry.findMetaError(
+                        result.dispatchError?.asModule.toU8a() as Uint8Array
+                    ))
                 } else if (result.isInBlock) {
                     const blockNumber = await this.getBlockNumber(result.status.toHuman().InBlock)
                     res(blockNumber)
@@ -33,7 +35,28 @@ export class CircuitRelayer {
                     // @ts-ignore
                     if (result && result.toHuman().dispatchError !== undefined) { // The pallet doesn't return a proper error
                         // @ts-ignore
-                        rej(result.toHuman().dispatchError)
+                        rej(this.circuit.registry.findMetaError(
+                            result.dispatchError?.asModule.toU8a() as Uint8Array
+                        ))
+                    } else if (result.isInBlock) {
+                        const blockNumber = await this.getBlockNumber(result.status.toHuman().InBlock)
+                        res(blockNumber)
+                    }
+                })
+        })
+    }
+
+    bidExecution(args: any) {
+        return new Promise((res: any, rej: any) => {
+            return this.circuit.tx.circuit
+                .bidExecution(args.xtxId, args.sfxId, args.bidAmount)
+                .signAndSend(this.signer, async result => {
+                    // @ts-ignore
+                    if (result && result.toHuman().dispatchError !== undefined) { // The pallet doesn't return a proper error
+                        // @ts-ignore
+                        rej(this.circuit.registry.findMetaError(
+                            result.dispatchError?.asModule.toU8a() as Uint8Array
+                        ))
                     } else if (result.isInBlock) {
                         const blockNumber = await this.getBlockNumber(result.status.toHuman().InBlock)
                         res(blockNumber)
@@ -58,7 +81,9 @@ export class CircuitRelayer {
                     // @ts-ignore
                     if (result && result.toHuman().dispatchError !== undefined) { // The pallet doesn't return a proper error
                         // @ts-ignore
-                        rej(result.toHuman().dispatchError)
+                        rej(this.circuit.registry.findMetaError(
+                            result.dispatchError?.asModule.toU8a() as Uint8Array
+                        ))
                     } else if (result.isInBlock) {
                         // res(true)
                         // @ts-ignore
