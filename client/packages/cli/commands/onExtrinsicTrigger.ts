@@ -12,8 +12,8 @@ export const onExtrinsicTrigger = (circuitApi: ApiPromise, sideEffects: any[], s
                     from: sender.toString(),
                     to: data.to,
                     value: sdk.gateways[data.target].floatToBn(data.amount),
-                    maxReward: sdk.floatToBn(data.reward), // CLI accepts floats, so we need to convert
-                    insurance: sdk.floatToBn(data.insurance), // same here
+                    maxReward: sdk.circuit.floatToBn(data.reward), // CLI accepts floats, so we need to convert
+                    insurance: sdk.circuit.floatToBn(data.insurance), // same here
                     nonce: 0,
                 })
                 return obj

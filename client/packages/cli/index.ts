@@ -1,6 +1,5 @@
 import config from "./config/setup"
 import { ApiPromise, Keyring } from'@polkadot/api';
-import { CircuitRelayer } from "./circuitRelayer";
 import { register } from "./commands/register/register";
 import { setOperational } from "./commands/operational";
 import {onExtrinsicTrigger} from "./commands/onExtrinsicTrigger";
@@ -11,6 +10,7 @@ import { Sdk, converters } from "@t3rn/sdk/dist/src";
 import { Command } from 'commander';
 import {bid} from "./commands/bid";
 const program = new Command();
+import { cryptoWaitReady } from '@polkadot/util-crypto';
 
 program
   .name('t3rn CLI')
@@ -19,28 +19,28 @@ program
 
 class CircuitCLI {
     circuit: ApiPromise;
-    circuitRelayer: CircuitRelayer;
     signer: any;
     sdk: Sdk;
 
     async setup() {
-        this.sdk = new Sdk("ws://127.0.0.1:9944")
-        this.circuit = await this.sdk.init();
-
+        await cryptoWaitReady();
         const keyring = new Keyring({ type: "sr25519" })
         this.signer = process.env.CIRCUIT_KEY === undefined
-                ? keyring.addFromUri("//Cli//default")
+                ? keyring.addFromUri("//Alice")
                 : keyring.addFromMnemonic(process.env.CIRCUIT_KEY)
-        this.circuitRelayer = new CircuitRelayer(this.circuit, this.signer)
+
+        this.sdk = new Sdk("ws://127.0.0.1:9944", this.signer)
+        // @ts-ignore suddenly this is not working
+        this.circuit = await this.sdk.init();
     }
 
     async close() {
-        this.circuit.disconnect()
+        await this.circuit.disconnect()
         process.exit();
     }
 
     async error() {
-        this.circuit.disconnect()
+        await this.circuit.disconnect()
         process.exit(1);
     }
 
@@ -64,10 +64,10 @@ class CircuitCLI {
                 registrationData[0].allowed_side_effects,
                 registrationData[0].registration_data.toHex()
             );
-            let submissionHeight = await this.circuitRelayer.sudoSignAndSend(tx)
+            let submissionHeight = await this.sdk.circuit.tx.signAndSendSafe(this.sdk.circuit.tx.createSudo(tx))
+                .then(() => console.log("Success: Gateway registered!"))
                 .catch(err => {
-                    console.log(err)
-                    console.log("Registration Failed!")
+                    console.error("Error: Registration Failed! Err:", err)
                     this.error()
                 })
 
@@ -89,10 +89,11 @@ class CircuitCLI {
         const data = config.gateways.find(elem => elem.id === id)
         if (data) {
             const transactionArgs = await setOperational(this.circuit, data, operational)
-            const submissionHeight = await this.circuitRelayer.sudoSignAndSend(this.circuit.tx.portal.setOperational(transactionArgs?.gatewayId, transactionArgs?.operational))
+            const tx = this.circuit.tx.portal.setOperational(transactionArgs?.gatewayId, transactionArgs?.operational);
+            let submissionHeight = await this.sdk.circuit.tx.signAndSendSafe(this.sdk.circuit.tx.createSudo(tx))
+                .then(() => console.log("Success: Operational status set!"))
                 .catch(err => {
-                    console.log(err);
-                    console.log("setOperational Failed!");
+                    console.error("Error: setOperational Failed! Err:", err)
                     this.error()
                 })
 
@@ -118,10 +119,19 @@ class CircuitCLI {
                 gatewayData.relaychainRpc = config.gateways.find(elem => elem.id === gatewayData.registrationData.parachain.relayChainId).rpc
             }
             const transactionArgs: any[] = await submitHeader(this.circuit, gatewayData, id)
-            const submissionHeight = await this.circuitRelayer.submitHeaders(transactionArgs)
+            let tx = this.sdk.circuit.tx.createBatch(transactionArgs.map(args => {
+                return this.circuit.tx.portal.submitHeaders(
+                    args.gatewayId,
+                    args.data.toHex() // we submit in encoded form to portal
+                )
+            }))
+            let submissionHeight = await this.sdk.circuit.tx.signAndSendSafe(tx)
+                .then(height => {
+                    console.log("Success: Header Range submitted!")
+                    return height
+                })
                 .catch(err => {
-                    console.log(err)
-                    console.log("Header Submission Failed!")
+                    console.error("Error: Header Submission Failed! Err:", err)
                     this.error()
                 })
 
@@ -145,16 +155,21 @@ class CircuitCLI {
         if(gatewayData) {
             if(data.to === '') data.to = gatewayData.transferData.receiver;
             const transactionArgs: any = onExtrinsicTrigger(this.circuit, [data], sequential, this.signer.address, this.sdk)
+            const tx = this.circuit.tx.circuit.onExtrinsicTrigger(transactionArgs.sideEffects, 0, false)
             // @ts-ignore
-            let submissionNumber: number = await this.circuitRelayer.onExtrinsicTrigger(transactionArgs)
+            let submissionHeight = await this.sdk.circuit.tx.signAndSendSafe(tx)
+                .then(height => {
+                    console.log("Success: Transfer submitted!")
+                    return height
+                })
                 .catch(err => {
-                    console.log("Transfer Failed! Error:", err);
+                    console.error("Error: Transfer submission failed! Err:", err);
                     this.error()
                 })
 
             if (data.exportArgs) {
                 const fileName = `./exports/` + data.exportName + '.json';
-                this.exportData([transactionArgs], fileName, "transfer", submissionNumber)
+                this.exportData([transactionArgs], fileName, "transfer", submissionHeight as string)
             } else {
                 this.close()
             }
@@ -176,22 +191,27 @@ class CircuitCLI {
         // Check we have an config for each SideEffect
         data.sideEffects.forEach(effect => {
             if (!config.gateways.find(entry => entry.id === effect.target)) {
-                console.log(`Gateway for SideEffect ${effect.type} not found!`)
+                console.error(`Error: Gateway for SideEffect ${effect.type} not found!`)
                 this.error()
             }
         })
 
         const transactionArgs: any = onExtrinsicTrigger(this.circuit, data.sideEffects, data.sequential, this.signer.address, this.sdk)
-        // @ts-ignore
-        let submissionNumber: number = await this.circuitRelayer.onExtrinsicTrigger(transactionArgs)
+        const tx = this.circuit.tx.circuit.onExtrinsicTrigger(transactionArgs.sideEffects, 0, false)
+
+        const submissionHeight = await this.sdk.circuit.tx.signAndSendSafe(tx)
+            .then(height => {
+                console.log("Success: SideEffects submitted!!")
+                return height
+            })
             .catch(err => {
-                console.log("Transfer Failed! Error:", err);
+                console.error("Error: SideEffects submission failed! Err:", err);
                 this.error()
             })
 
         if (exportArgs) {
             const fileName = `./exports/` + exportName + '.json';
-            this.exportData([transactionArgs], fileName, "transfer", submissionNumber)
+            this.exportData([transactionArgs], fileName, "transfer", submissionHeight as string)
         } else {
             this.close()
         }
@@ -200,22 +220,27 @@ class CircuitCLI {
     async bid(data: any, exportArgs: boolean, exportName: string) {
         const transactionArgs: any = bid(this.circuit, data, this.sdk);
 
+        const tx = this.circuit.tx.circuit.bidExecution(transactionArgs.sfxId, transactionArgs.bidAmount)
         // @ts-ignore
-        let submissionNumber: number = await this.circuitRelayer.bidExecution(transactionArgs)
+        let submissionHeight = await this.sdk.circuit.tx.signAndSendSafe(tx)
+            .then(height => {
+                console.log("Success: Bid submitted!")
+                return height
+            })
             .catch(err => {
-                console.log("Transfer Failed! Error:", err);
+                console.error("Error: Bidding Failed! Err:", err);
                 this.error()
             })
 
         if (exportArgs) {
             const fileName = `./exports/` + exportName + '.json';
-            this.exportData([transactionArgs], fileName, "transfer", submissionNumber)
+            this.exportData([transactionArgs], fileName, "transfer", submissionHeight as string)
         } else {
             this.close()
         }
     }
 
-    exportData(data: any, fileName: string, transactionType: string, submissionHeight: number) {
+    exportData(data: any, fileName: string, transactionType: string, submissionHeight: string) {
         let deepCopy;
         // since its pass-by-reference
         if(Array.isArray(data)) {
@@ -224,14 +249,14 @@ class CircuitCLI {
             deepCopy = {...data};
         }
 
-        let encoded = converters.utils.encodeExport(deepCopy, transactionType, submissionHeight);
+        let encoded = converters.utils.encodeExport(deepCopy, transactionType, submissionHeight as string);
         fs.writeFile(fileName, JSON.stringify(encoded, null, 4), (err) => {
             if(err) {
-              console.log(err);
-              this.error();
+                console.error("Error: Failed to export data! Err:", err);
+                this.error();
             } else {
-              console.log("JSON saved to " + fileName);
-              this.close();
+                console.log("JSON saved to " + fileName);
+                this.close();
             }
         });
     }
@@ -303,15 +328,14 @@ program.command('submit-side-effects')
 
 program.command('bid')
       .description('Bid on an execution as an Executor')
-      .argument('xtxId <string>', 'xtxId of the execution')
       .argument('sfxId <string>', 'sfxId of the side effect to bid on')
       .argument('amount <float>', 'bid amount')
       .option('-e, --export', 'export the transaction arguments as JSON', false)
       .option('-o, --output <string>', 'specify the filename of the export', "export")
-      .action(async (xtxId, sfxId, amount, options) => {
+      .action(async (sfxId, amount, options) => {
           let cli = new CircuitCLI();
           await cli.setup()
-          cli.bid({xtxId, sfxId, amount}, options.export, options.output)
+          cli.bid({sfxId, amount}, options.export, options.output)
       });
 
 program.parse();

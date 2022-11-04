@@ -5,6 +5,6 @@ export const bid = (circuit: ApiPromise, args: any, sdk: Sdk) => {
     return {
         xtxId: circuit.createType("Hash", args.xtxId),
         sfxId: circuit.createType("SideEffectId", args.sfxId),
-        bidAmount: circuit.createType("u128", sdk.floatToBn(args.amount))
+        bidAmount: circuit.createType("u128", sdk.circuit.floatToBn(args.amount))
     }
 }
