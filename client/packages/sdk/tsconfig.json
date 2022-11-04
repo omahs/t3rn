@@ -8,7 +8,9 @@
     "target": "esnext",
     "sourceMap": true,
     "lib": [
-      "es6", "es2018"
+      "es6",
+      "es2018",
+      "es2020.bigint"
     ],
     "esModuleInterop": true,
     "alwaysStrict": false,
@@ -19,7 +21,7 @@
     "noUnusedLocals": true,
     "resolveJsonModule": true,
     "composite": true,
-    "declaration": true,
+    "declaration": true
   },
   "references": [],
   "exclude": ["node_modules", "dist", "*.d.ts"],

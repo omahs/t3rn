@@ -26,7 +26,7 @@ export const toIdString = (targetId: number[] | string): string => {
 // encodes data for exporting. We export in encoded and human format.
 // Encoded: We use for seeding portal rust tests
 // Human: Debugging those tests and viewing data
-export const encodeExport = (data: any, transactionType: string, submissionHeight: number) => {
+export const encodeExport = (data: any, transactionType: string, submissionHeight: string) => {
     if(Array.isArray(data)) {
         return data.map(entry => iterateEncode(entry, transactionType, submissionHeight))
     } else {
@@ -34,7 +34,7 @@ export const encodeExport = (data: any, transactionType: string, submissionHeigh
     }
 }
 
-const iterateEncode = (data: any, transactionType: string, submissionHeight: number) => {
+const iterateEncode = (data: any, transactionType: string, submissionHeight: string) => {
     let keys = Object.keys(data);
     let result = {};
     if(keys.includes("initialU8aLength")) { // this is a polkadot/apiPromise object

@@ -1,18 +1,14 @@
-import '@polkadot/api-augment';
+import '@polkadot/api-augment'; // DO NOT REMOVE THIS LINE
 import { ApiPromise, WsProvider } from "@polkadot/api"
 
 import types from './config/types.json';
 import rpc from './config/rpc.json';
 import {Gateway, initGateways} from "./gateways";
-import * as BN from 'bn.js'
 // @ts-ignore
 import {T3rnTypesSideEffect} from "@polkadot/types/lookup";
 import * as encodings from './encodings'
 import * as converters from './converters'
-import {AmountConverter} from "./converters/amounts";
-
-const DECIMALS = 12;
-const VALUE_TYPE_SIZE = 16;
+import {Circuit} from "./circuit";
 
 export class Sdk {
 
@@ -21,11 +17,12 @@ export class Sdk {
 	gateways: {
 		[id: string]: Gateway
 	}
-	amountConverter: AmountConverter;
+	circuit: Circuit
+	private signer: any;
 
-	constructor(rpcUrl: string) {
+	constructor(rpcUrl: string, circuitSigner: any) {
 		this.rpcUrl = rpcUrl;
-
+		this.signer = circuitSigner;
 	}
 
 	// Initializes ApiPromise instance and loads available gateways via XDNS
@@ -36,15 +33,9 @@ export class Sdk {
 			rpc: rpc as any
 		})
 		this.gateways = await initGateways(this.client)
-		return this.client
-	}
+		this.circuit = new Circuit(this.client, this.signer)
 
-	//ToDo this should be moved to a more sensible namespace
-	floatToBn(value: number): BN {
-		return new AmountConverter({
-			decimals: DECIMALS,
-			valueTypeSize: VALUE_TYPE_SIZE}
-		).floatToBn(value)
+		return this.client
 	}
 }
 
