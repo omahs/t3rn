@@ -220,7 +220,7 @@ class CircuitCLI {
     async bid(data: any, exportArgs: boolean, exportName: string) {
         const transactionArgs: any = bid(this.circuit, data, this.sdk);
 
-        const tx = this.circuit.tx.circuit.bidExecution(transactionArgs.sfxId, transactionArgs.bidAmount)
+        const tx = this.circuit.tx.circuit.bidSfx(transactionArgs.sfxId, transactionArgs.bidAmount)
         // @ts-ignore
         let submissionHeight = await this.sdk.circuit.tx.signAndSendSafe(tx)
             .then(height => {

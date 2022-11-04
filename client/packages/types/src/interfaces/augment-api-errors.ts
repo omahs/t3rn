@@ -135,6 +135,7 @@ declare module "@polkadot/api-base/types/errors" {
       SideEffectIsAlreadyScheduledToExecuteOverXBI: AugmentedError<ApiType>;
       SideEffectsValidationFailed: AugmentedError<ApiType>;
       SignalQueueFull: AugmentedError<ApiType>;
+      UnauthorizedCancellation: AugmentedError<ApiType>;
       UnsupportedRole: AugmentedError<ApiType>;
       UpdateXtxTriggeredWithUnexpectedStatus: AugmentedError<ApiType>;
       XBIExitFailedOnSFXConfirmation: AugmentedError<ApiType>;

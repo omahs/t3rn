@@ -1150,13 +1150,16 @@ declare module "@polkadot/api-base/types/submittable" {
       [key: string]: SubmittableExtrinsicFunction<ApiType>;
     };
     circuit: {
-      bidExecution: AugmentedSubmittable<
+      bidSfx: AugmentedSubmittable<
         (
-          xtxId: H256 | string | Uint8Array,
           sfxId: H256 | string | Uint8Array,
           bidAmount: u128 | AnyNumber | Uint8Array
         ) => SubmittableExtrinsic<ApiType>,
-        [H256, H256, u128]
+        [H256, u128]
+      >;
+      cancelXtx: AugmentedSubmittable<
+        (xtxId: H256 | string | Uint8Array) => SubmittableExtrinsic<ApiType>,
+        [H256]
       >;
       /**
        * Blind version should only be used for testing - unsafe since skips
@@ -1164,21 +1167,7 @@ declare module "@polkadot/api-base/types/submittable" {
        */
       confirmSideEffect: AugmentedSubmittable<
         (
-          xtxId: H256 | string | Uint8Array,
-          sideEffect:
-            | T3rnTypesSideEffect
-            | {
-                target?: any;
-                maxReward?: any;
-                insurance?: any;
-                encodedAction?: any;
-                encodedArgs?: any;
-                signature?: any;
-                nonce?: any;
-                enforceExecutor?: any;
-              }
-            | string
-            | Uint8Array,
+          sfxId: H256 | string | Uint8Array,
           confirmation:
             | T3rnTypesSideEffectConfirmedSideEffect
             | {
@@ -1190,22 +1179,9 @@ declare module "@polkadot/api-base/types/submittable" {
                 cost?: any;
               }
             | string
-            | Uint8Array,
-          inclusionProof:
-            | Option<Vec<Bytes>>
-            | null
             | Uint8Array
-            | Vec<Bytes>
-            | (Bytes | string | Uint8Array)[],
-          blockHash: Option<Bytes> | null | Uint8Array | Bytes | string
         ) => SubmittableExtrinsic<ApiType>,
-        [
-          H256,
-          T3rnTypesSideEffect,
-          T3rnTypesSideEffectConfirmedSideEffect,
-          Option<Vec<Bytes>>,
-          Option<Bytes>
-        ]
+        [H256, T3rnTypesSideEffectConfirmedSideEffect]
       >;
       executeSideEffectsWithXbi: AugmentedSubmittable<
         (
@@ -1219,7 +1195,6 @@ declare module "@polkadot/api-base/types/submittable" {
                 encodedAction?: any;
                 encodedArgs?: any;
                 signature?: any;
-                nonce?: any;
                 enforceExecutor?: any;
               }
             | string
@@ -1242,7 +1217,6 @@ declare module "@polkadot/api-base/types/submittable" {
                     encodedAction?: any;
                     encodedArgs?: any;
                     signature?: any;
-                    nonce?: any;
                     enforceExecutor?: any;
                   }
                 | string
