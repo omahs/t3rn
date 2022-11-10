@@ -1,3 +1,0 @@
-# Light Clients
-
-🚧 Under Construction 🚧 

@@ -15,7 +15,7 @@ To perform multichain transactions, t3rn relies on essential network components 
 
 ## Overview of Docs
 
-- [**Quick Start**](quickstart) gives you the resources you need to get started.
+- [**What is t3rn**](about_t3rn/what-is-t3rn) gives you a small overview of what t3rn is.
   testing, deploying, and interacting with smart contracts on the network.
 - [**Collators**](collator/intro-collator) will explain everything you need to know to run your own collator
 - [**XBI**](integrations) provide relevant information about XBI and how to use it to interact with other XBI enabled Parachains
