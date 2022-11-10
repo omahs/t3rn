@@ -2,7 +2,7 @@
 sidebar_position: 1
 ---
 
-# Executor Overview
+# Executor
 
 At t3rn, we aim to abstract away the complexity of cross-chain transactions. Being one of the Polkadot Parachains, we can utilize XCM to perform cross-chain transactions with other Polkadot parachains. In order to connect to other blockchains, outside of the Polkadot ecosystem, we need to rely on other network participants to facilitate these transactions for us, in t3rn nomenclature we call them 'executors'. 
 
