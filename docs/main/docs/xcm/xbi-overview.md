@@ -1,16 +1,16 @@
 
 
-#### Overview
+# XBI overview
 XBI Format is an XCM-based high-level interface that each Parachain can optionally implement and enable others to use, while defining the error and result handling using an asynchronous, promise-like solution. XBI specifically focuses on setting the standards between cross-chain smart contract execution.
 
 
-XBI Format consists of two parts:
+**XBI Format consists of two parts:**
 1. XBI Instruction ordered on destination Parachain to execute, over XCM Transact.
 2. XBI Metadata specifies details of interoperable execution and receives asynchronous results.
 
 All XBI traffic goes over XCM Transact, therefore deriving its security from XCM.
 
-#### Motivation
+## Motivation
 Set high-level format XBI standard for interfaces implementing interactions between Parachains, specifically EVM and WASM based contracts.
 
 XBI focuses on usability. It will recognise the difference between WASM and EVM, the most popular smart contract byte code in the Polkadot ecosystem today.
@@ -20,7 +20,7 @@ The XBI interface offers contingencies against runtime upgrades while allowing P
 XBI Metadata provides coherent controls over cross-chain execution, leaving dispatching origin in complete control over the execution costs and results format.
 
 
-#### Specification
+## Specification
 ##### Global XBI Types 
 ```rust
 pub type AccountId32 = sp_runtime::AccountId32;
