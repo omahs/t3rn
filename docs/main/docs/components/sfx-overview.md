@@ -21,19 +21,22 @@ pub struct SideEffect<AccountId, BalanceOf> {
 ```
 
 #### target:
-The target describes the `destination` consensus system the Sideeffect should be executed on. 
+`target` describes the destination consensus system the Sideeffect should be executed on. 
 
 #### max_reward 
-The max_reward sets the reward for the Executor in `TRN`.
+`max_reward` sets the reward for the Executor in `TRN`.
+
+#### insurance
+`insurance` sets the minimum amount of insurance and Executor has to Bond. This is important for optimistic transactions.
 
 #### encoded_action
-The encoded_action sets the action that should be done on the target chain e.g.: call `function x` on `contract y`.
+`encoded_action` sets the action that should be done on the target chain e.g.: call `function x` on `contract y`.
 
 #### encoded_args
-The encoded_args sets the arguments that should be passed in `function_y`, when calling a function on a `contract_x` e.g.: contract_x.function_y(`args`).
+`encoded_args` sets the arguments that should be passed in `function_y`, when calling a function on a `contract_x` e.g.: contract_x.function_y(`args`).
 
 #### signature
-The signature attribute holds the `signature` of the creator of the Sideeffect.
+`signature` attribute holds the signature of the creator of the Sideeffect.
 
 #### enforce_executor
-The enforce_executor attributer lets the user set the executor that should execute the Sideeffect.
+`enforce_executor` set the executor that should execute the Sideeffect.

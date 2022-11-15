@@ -16,10 +16,10 @@ To perform multichain transactions, t3rn relies on essential network components 
 
 ## Overview of Docs
 
-- [**What is t3rn**](about_t3rn/what-is-t3rn) gives you a small overview of what t3rn is.
-- [**Collators**](collator/intro-collator) will explain everything you need to know to run your own collator
-- [**XBI**](integrations) provide relevant information about XBI and how to use it to interact with other XBI enabled Parachains
-- [**FAQ**](faq) gives you all answert to the most asked questions
+- [**What is t3rn**](about_t3rn/what-is-t3rn) gives you a small overview of t3rn.
+- [**Collators**](collator/intro-collator) will explain everything you need to know to run your own collator.
+- [**XBI**](integrations) provide relevant information about XBI and how to use it to interact with other XBI enabled Parachains.
+- [**FAQ**](faq) gives you all answert to the most asked questions.
 
 
 
