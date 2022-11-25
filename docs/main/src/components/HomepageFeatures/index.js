@@ -12,7 +12,7 @@ const FeatureList = [
         A deep dive into the concepts that power t3rn
       </>
     ),
-    link: "/concepts/intro",
+   
     button: "Concepts"
   },
   {
